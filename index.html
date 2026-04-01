@@ -19,7 +19,7 @@
 
     <div id="loading" class="fixed inset-0 bg-slate-50 z-50 flex flex-col items-center justify-center">
         <i class="fa-solid fa-circle-notch fa-spin text-4xl text-emerald-600 mb-4"></i>
-        <p class="text-slate-500">正在讀取最新社群數據...</p>
+        <p class="text-slate-500">正在讀取社群數據</p>
     </div>
 
     <div id="dashboard">
@@ -60,7 +60,7 @@
                             <i class="fa-solid fa-circle-info text-slate-400 cursor-help"></i>
                         </div>
                         <div class="text-2xl font-bold text-slate-800"><span id="valPageER">-</span> <span class="text-sm text-slate-500 font-normal">%</span></div>
-                        <div class="tooltip-text invisible opacity-0 absolute z-10 top-full left-0 mt-2 w-64 p-3 bg-slate-800 text-white text-xs rounded shadow-lg">計算公式：特定期間內，所有貼文的互動總數 / 粉專總追蹤人數 * 100%。</div>
+                        <div class="tooltip-text invisible opacity-0 absolute z-10 top-full left-0 mt-2 w-64 p-3 bg-slate-800 text-white text-xs rounded shadow-lg">特定期間內，所有貼文的互動總數 / 粉專總追蹤人數 * 100%。</div>
                     </div>
                     <div class="bg-white rounded-xl shadow-sm p-5 border border-slate-100 relative tooltip-container">
                         <div class="flex justify-between items-start mb-2">
@@ -68,7 +68,7 @@
                             <i class="fa-solid fa-circle-info text-slate-400 cursor-help"></i>
                         </div>
                         <div class="text-2xl font-bold text-slate-800"><span id="valPostER">-</span> <span class="text-sm text-slate-500 font-normal">%</span></div>
-                        <div class="tooltip-text invisible opacity-0 absolute z-10 top-full left-0 mt-2 w-64 p-3 bg-slate-800 text-white text-xs rounded shadow-lg">計算公式：總互動數 / (粉絲數 * 貼文總數)。衡量單篇貼文吸引粉絲互動的能力。</div>
+                        <div class="tooltip-text invisible opacity-0 absolute z-10 top-full left-0 mt-2 w-64 p-3 bg-slate-800 text-white text-xs rounded shadow-lg">總互動數 / (粉絲數 * 貼文總數)。衡量單篇貼文吸引粉絲互動的能力。</div>
                     </div>
                 </div>
             </div>
@@ -100,9 +100,7 @@
                             <option value="followers">追蹤者數目</option>
                         </select>
                     </div>
-                    <div class="h-72 relative w-full">
-                        <canvas id="categoryHBarChart"></canvas>
-                    </div>
+                    <div class="h-72 relative w-full"><canvas id="categoryHBarChart"></canvas></div>
                 </div>
 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
@@ -123,7 +121,6 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 tooltip-container">
                     <h3 class="font-bold text-slate-800 mb-2 flex justify-between items-center">
                         <span>粉專表現矩陣 (互動品質對比)</span>
@@ -133,11 +130,9 @@
                         <span class="font-semibold text-slate-600">計算方式：</span><br>
                         • Ｘ軸為<span class="text-emerald-600">「貼文互動率」</span>：代表平均每一篇貼文吸引粉絲互動的能力。<br>
                         • Ｙ軸為<span class="text-emerald-600">「粉專互動率」</span>：代表整個粉專在觀察期間累積的總熱度。<br>
-                        👉 <span class="font-medium text-slate-700">落在右上角的粉專，代表其「發文品質高」且「粉絲整體參與度也高」。</span>
+                        👉 <span class="font-medium text-slate-700">落在右上角的粉專，代表其發文品質高且粉絲整體參與度也高。</span>
                     </p>
-                    
                     <div class="h-64 relative w-full"><canvas id="scatterChart"></canvas></div>
-                    
                     <div class="flex justify-center flex-wrap gap-4 text-xs mt-4">
                         <span class="flex items-center"><span class="w-3 h-3 bg-[#10b981] rounded-full mr-1.5"></span>基準粉專</span>
                         <span class="flex items-center"><span class="w-3 h-3 bg-[#64748b] rounded-full mr-1.5"></span>林保署體系</span>
@@ -148,14 +143,13 @@
 
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
                     <h3 class="font-bold text-slate-800 mb-4">內容發布與 NLP 深度分析</h3>
-                    
                     <div class="space-y-4 mb-6">
                         <div class="flex justify-between items-center border-b border-slate-100 pb-2">
                             <span class="text-slate-600 text-sm">平均每日貼文</span>
                             <span class="font-bold text-lg text-slate-800"><span id="valAvgDaily">-</span> <span class="text-xs font-normal text-slate-500">篇</span></span>
                         </div>
                         <div class="flex justify-between items-center border-b border-slate-100 pb-2">
-                            <span class="text-slate-600 text-sm">最佳互動發文時間 (台灣時區)</span>
+                            <span class="text-slate-600 text-sm">最佳互動發文時間 (臺灣時區)</span>
                             <span class="font-bold text-lg text-emerald-600 tracking-wide" id="valBestTime">-</span>
                         </div>
                     </div>
@@ -163,9 +157,6 @@
                     <h4 class="text-xs font-semibold text-slate-500 mb-4 mt-6 uppercase tracking-wider tooltip-container flex items-center">
                         <i class="fa-solid fa-brain mr-1.5 text-indigo-400"></i> AI 情緒語意分析 
                         <i class="fa-solid fa-circle-info text-slate-400 cursor-help text-[10px] ml-1"></i>
-                        <div class="tooltip-text invisible opacity-0 absolute z-10 bottom-full left-0 mb-2 w-64 p-3 bg-slate-800 text-white text-xs rounded shadow-lg normal-case font-normal tracking-normal">
-                            透過 NLP 自然語言處理技術，自動判斷文字為正面(綠)或負面(紅)情緒的比例。
-                        </div>
                     </h4>
                     
                     <div id="sentiment-container" class="space-y-5">
@@ -179,7 +170,6 @@
                                 <div class="h-2.5 bg-rose-500 transition-all duration-700" id="barPostNeg" style="width: 0%"></div>
                             </div>
                         </div>
-                        
                         <div>
                             <div class="flex justify-between text-sm mb-1.5">
                                 <span class="text-slate-600 font-medium">粉絲留言情緒</span>
@@ -193,20 +183,14 @@
                     </div>
 
                     <div class="mt-8 pt-6 border-t border-slate-100">
-                        <h4 class="text-xs font-semibold text-slate-500 mb-4 uppercase tracking-wider">Top 20 貼文熱門標籤與關鍵字</h4>
-                        
+                        <h4 class="text-xs font-semibold text-slate-500 mb-4 uppercase tracking-wider">Top 10 貼文熱門標籤與關鍵字</h4>
                         <div class="mb-5">
                             <p class="text-[11px] text-slate-400 mb-2"><i class="fa-solid fa-hashtag mr-1"></i>Top 10 Hashtags</p>
-                            <div class="flex flex-wrap gap-2" id="hashtagContainer">
-                                <span class="text-xs text-slate-400">分析中...</span>
-                            </div>
+                            <div class="flex flex-wrap gap-2" id="hashtagContainer"><span class="text-xs text-slate-400">分析中...</span></div>
                         </div>
-                        
                         <div>
                             <p class="text-[11px] text-slate-400 mb-2"><i class="fa-solid fa-quote-left mr-1"></i>Top 10 常用關鍵字</p>
-                            <div class="flex flex-wrap gap-1.5 items-center" id="keywordContainer">
-                                <span class="text-xs text-slate-400">分析中...</span>
-                            </div>
+                            <div class="flex flex-wrap gap-1.5 items-center" id="keywordContainer"><span class="text-xs text-slate-400">分析中...</span></div>
                         </div>
                     </div>
                 </div>
@@ -214,7 +198,7 @@
 
              <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden mb-8">
                 <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                    <h3 class="font-bold text-slate-800">互動前 20 名貼文清單</h3>
+                    <h3 class="font-bold text-slate-800">互動前 10 名貼文清單</h3>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse min-w-[600px]">
@@ -243,8 +227,57 @@
             try {
                 const response = await fetch('./data.json'); 
                 if (!response.ok) throw new Error('Data file not found');
-                dashboardData = await response.json();
+                let rawData = await response.json();
                 
+                // 前端動態運算
+                dashboardData = {
+                    lastUpdated: rawData.lastUpdated,
+                    dataScope: rawData.dataScope,
+                    basePage: rawData.basePage || {},
+                    allPages: rawData.allPages || [],
+                    averages: {
+                        all: { name: "全部粉專平均", pageEngagement: 0, postEngagement: 0, count: 0 },
+                        system: { name: "林保署體系平均", pageEngagement: 0, postEngagement: 0, count: 0 },
+                        subBranch: { name: "屏東分署下轄平均", pageEngagement: 0, postEngagement: 0, count: 0 },
+                        tourism: { name: "屏東縣旅遊平均", pageEngagement: 0, postEngagement: 0, count: 0 }
+                    },
+                    matrix: []
+                };
+
+                const typeMap = { "林保署體系": "system", "屏東分署下轄": "subBranch", "屏東縣旅遊": "tourism" };
+
+                dashboardData.allPages.forEach(p => {
+                    // 計算全部平均總和
+                    dashboardData.averages.all.pageEngagement += p.pageEngagement;
+                    dashboardData.averages.all.postEngagement += p.postEngagement;
+                    dashboardData.averages.all.count++;
+
+                    // 計算分類平均總和
+                    const group = typeMap[p.type];
+                    if (group) {
+                        dashboardData.averages[group].pageEngagement += p.pageEngagement;
+                        dashboardData.averages[group].postEngagement += p.postEngagement;
+                        dashboardData.averages[group].count++;
+                    }
+
+                    // 生成矩陣圖表資料
+                    dashboardData.matrix.push({
+                        name: p.name,
+                        x: p.postEngagement * 100, // 轉為百分比顯示
+                        y: p.pageEngagement,
+                        color: p.type === '基準粉專' ? '#10b981' : p.type === '林保署體系' ? '#64748b' : p.type === '屏東分署下轄' ? '#f59e0b' : '#3b82f6'
+                    });
+                });
+
+                // 總結平均值
+                Object.keys(dashboardData.averages).forEach(k => {
+                    const stat = dashboardData.averages[k];
+                    if (stat.count > 0) {
+                        stat.pageEngagement = Number((stat.pageEngagement / stat.count).toFixed(2));
+                        stat.postEngagement = Number((stat.postEngagement / stat.count).toFixed(4));
+                    }
+                });
+
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
                 
@@ -260,7 +293,7 @@
 
         function renderDashboard() {
             document.getElementById('lastUpdated').innerText = dashboardData.lastUpdated || '未知';
-            document.getElementById('dataScopeLabel').innerText = `資料範圍：${dashboardData.dataScope || '最近 90 天貼文'}`;
+            document.getElementById('dataScopeLabel').innerText = `資料範圍：${dashboardData.dataScope || '近期活躍貼文'}`;
             
             const base = dashboardData.basePage;
             if(!base || !base.name) {
@@ -272,7 +305,6 @@
             document.getElementById('valFollowers').innerText = (base.followers || 0).toLocaleString();
             document.getElementById('valPageER').innerText = base.pageEngagement || 0;
             document.getElementById('valPostER').innerText = base.postEngagement || 0;
-            
             document.getElementById('valAvgDaily').innerText = base.avgDailyPosts || '-';
             document.getElementById('valBestTime').innerText = base.bestPostingTime || '資料不足';
             
@@ -314,8 +346,8 @@
 
             const tableBody = document.getElementById('postTableBody');
             tableBody.innerHTML = ''; 
-            if(dashboardData.topPosts && dashboardData.topPosts.length > 0) {
-                dashboardData.topPosts.forEach(post => {
+            if(base.topPosts && base.topPosts.length > 0) {
+                base.topPosts.slice(0, 10).forEach(post => {
                     tableBody.innerHTML += `
                         <tr class="border-b border-slate-100 hover:bg-slate-50">
                             <td class="p-4 text-slate-500 whitespace-nowrap">${post.date}</td>
