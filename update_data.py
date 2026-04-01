@@ -8,14 +8,12 @@ from datetime import datetime, timedelta, timezone
 import traceback
 from snownlp import SnowNLP
 from urllib.parse import urlparse, parse_qs
-# 導入中研院 CKIP Transformers
-from ckip_transformers.nlp import CkipWordSegmenter
+import jieba
 
 # ==========================================
 # 1. 系統環境設定區
 # ==========================================
 BYCRAWL_API_KEY = os.environ.get('BYCRAWL_API_KEY', '您的_BYCRAWL_API_KEY')
-CSV_FILE_PATH = '粉專資料追蹤清單.csv'
 OUTPUT_JSON_PATH = 'data.json'
 HEADERS = {"x-api-key": BYCRAWL_API_KEY}
 
@@ -49,7 +47,9 @@ def fetch_page_profile(username):
         res_json = response.json()
         if res_json.get("success") is False: return None
         return res_json.get("data", res_json)
-    except Exception: return None
+    except Exception as e: 
+        print(f"  [錯誤] fetch_page_profile: {e}")
+        return None
 
 def fetch_page_posts_90_days(username):
     """取得最近 90 天的貼文，具備翻頁功能"""
@@ -58,14 +58,14 @@ def fetch_page_posts_90_days(username):
     cursor = None
     cutoff_date = datetime.now(timezone.utc) - timedelta(days=90)
     
-    # 最多翻 50 頁 
-    for _ in range(50):
+    # 最多翻 20 頁 (避免無限迴圈卡死 GitHub Action)
+    for _ in range(20):
         url = f"https://api.bycrawl.com/facebook/users/{username}/posts"
-        params = {"count": 10} # ByCrawl 單次最大數量
+        params = {"count": 10} 
         if cursor: params["cursor"] = cursor
             
         try:
-            response = requests.get(url, params=params, headers=HEADERS, timeout=30)
+            response = requests.get(url, params=params, headers=HEADERS, timeout=45)
             response.raise_for_status()
             res_json = response.json()
             
@@ -79,7 +79,6 @@ def fetch_page_posts_90_days(username):
                 created_at = p.get('createdAt') or p.get('created_at')
                 if created_at:
                     try:
-                        # 解析 UTC 時間
                         post_dt = datetime.strptime(created_at[:19], "%Y-%m-%dT%H:%M:%S").replace(tzinfo=timezone.utc)
                         if post_dt < cutoff_date:
                             reached_cutoff = True
@@ -93,7 +92,7 @@ def fetch_page_posts_90_days(username):
             if not cursor: break # 沒有下一頁了
             
         except Exception as e:
-            print(f"  [警告] 翻頁抓取貼文發生異常: {e}")
+            print(f"  [警告] 翻頁抓取貼文發生異常，中斷翻頁: {e}")
             break
             
     return all_posts
@@ -130,13 +129,23 @@ def analyze_sentiment(text_list):
     pos_ratio = round((positive_count / valid_text_count) * 100)
     return {"positive": pos_ratio, "negative": 100 - pos_ratio}
 
+def get_csv_file():
+    """自動尋找當前目錄下的 csv 檔案"""
+    for file in os.listdir('.'):
+        if file.endswith('.csv'):
+            return file
+    return None
+
 def main():
-    print(f"啟動每月社群數據更新排程 (90天資料)... (執行時間: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')})")
+    print(f"啟動每月社群數據更新排程 (90天 & Jieba)... (執行時間: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')})")
     
-    # 載入中研院 CKIP 輕量斷詞模型 
-    print("載入中研院 CKIP 斷詞模型")
-    ws_driver = CkipWordSegmenter(model="albert-tiny", device=-1)
-    
+    # 尋找 CSV 檔案 (解決檔名可能為 '粉專資料追蹤清單 - 工作表1.csv' 的問題)
+    csv_file = get_csv_file()
+    if not csv_file:
+        print("❌ 找不到任何 .csv 檔案，請確認檔案已上傳！")
+        return
+    print(f"找到 CSV 檔案: {csv_file}")
+
     final_data = {
         "lastUpdated": datetime.now(TW_TZ).strftime("%Y-%m-%d %H:%M:%S"),
         "dataScope": "最近 90 天貼文",
@@ -160,146 +169,150 @@ def main():
     }
 
     pages = []
-    if os.path.exists(CSV_FILE_PATH):
-        with open(CSV_FILE_PATH, mode='r', encoding='utf-8-sig') as f:
+    try:
+        with open(csv_file, mode='r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f)
             for row in reader: pages.append(row)
+    except Exception as e:
+        print(f"❌ 讀取 CSV 發生錯誤: {e}")
+        return
 
     for page in pages:
-        page_type = page.get('類型', '未知類型')
-        page_name = page.get('粉專名稱', '未命名')
-        username = extract_fb_id(page.get('網址', ''))
-        if not username: continue
+        try:
+            page_type = page.get('類型', '未知類型')
+            page_name = page.get('粉專名稱', '未命名')
+            username = extract_fb_id(page.get('網址', ''))
             
-        print(f"\n🔄 正在處理: {page_name} (ID: {username})")
-        profile_data = fetch_page_profile(username)
-        if not profile_data: continue
-        
-        followers = profile_data.get('followerCount', profile_data.get('likesCount', 0))
-        if followers == 0: continue
+            if not username: continue
+                
+            print(f"\n🔄 正在處理: {page_name} (ID: {username})")
+            profile_data = fetch_page_profile(username)
+            if not profile_data: 
+                print("  └ 無法取得 profile_data，跳過此粉專。")
+                continue
             
-        # 抓取 90 天內的所有貼文
-        posts = fetch_page_posts_90_days(username)
-        total_interactions = 0
-        valid_posts_count = len(posts)
-        
-        for p in posts:
-            interactions = p.get('reactionCount', 0) + p.get('commentCount', 0) + p.get('shareCount', 0)
-            total_interactions += interactions
-            p['total_interactions'] = interactions
+            followers = profile_data.get('followerCount', profile_data.get('likesCount', 0))
+            if followers == 0: 
+                print("  └ 粉絲數為 0，跳過。")
+                continue
+                
+            posts = fetch_page_posts_90_days(username)
+            total_interactions = 0
+            valid_posts_count = len(posts)
             
-        if valid_posts_count == 0:
-            post_engagement = 0; page_engagement = 0
-        else:
-            post_engagement = round((total_interactions / (followers * valid_posts_count)) * 100, 4)
-            page_engagement = round((total_interactions / followers) * 100, 2)
-        
-        print(f"  └ 粉絲: {followers:,} | 90天內貼文: {valid_posts_count} | 粉專互動率: {page_engagement}%")
-
-        final_data['allPages'].append({
-            "name": page_name, "type": page_type, "followers": followers,
-            "pageEngagement": page_engagement, "postEngagement": post_engagement
-        })
-
-        category_stats["all"]["page_er_sum"] += page_engagement
-        category_stats["all"]["post_er_sum"] += post_engagement
-        category_stats["all"]["count"] += 1
-        if page_type in category_stats:
-            category_stats[page_type]["page_er_sum"] += page_engagement
-            category_stats[page_type]["post_er_sum"] += post_engagement
-            category_stats[page_type]["count"] += 1
-
-        final_data['matrix'].append({
-            "name": page_name, "x": post_engagement * 100, "y": page_engagement,
-            "color": '#10b981' if page_type == '基準粉專' else '#64748b' if page_type == '林保署體系' else '#f59e0b' if page_type == '屏東分署下轄' else '#3b82f6'
-        })
-
-        # ==========================================
-        # 基準粉專專屬深度處理 (時區、CKIP 斷詞)
-        # ==========================================
-        if page_type == '基準粉專':
-            all_comments_text = []
-            post_texts = []
-            hour_interactions = {}
-            all_hashtags = []
-            texts_for_ckip = [] # 準備送給 CKIP 的字串陣列
+            for p in posts:
+                interactions = p.get('reactionCount', 0) + p.get('commentCount', 0) + p.get('shareCount', 0)
+                total_interactions += interactions
+                p['total_interactions'] = interactions
+                
+            if valid_posts_count == 0:
+                post_engagement = 0; page_engagement = 0
+            else:
+                post_engagement = round((total_interactions / (followers * valid_posts_count)) * 100, 4)
+                page_engagement = round((total_interactions / followers) * 100, 2)
             
-            stop_words = {'的', '是', '在', '了', '與', '和', '也', '有', '就', '我', '這', '都', '及', '為', '讓', '於', '以', '對', '我們', '大家'}
+            print(f"  └ 粉絲: {followers:,} | 90天內貼文: {valid_posts_count} | 粉專互動率: {page_engagement}%")
 
-            sorted_posts = sorted(posts, key=lambda x: x.get('total_interactions', 0), reverse=True)
-            
-            for index, sp in enumerate(sorted_posts):
-                text = sp.get('text') or sp.get('message') or sp.get('description') or ''
-                if text: post_texts.append(text)
+            final_data['allPages'].append({
+                "name": page_name, "type": page_type, "followers": followers,
+                "pageEngagement": page_engagement, "postEngagement": post_engagement
+            })
 
-                # 時區轉換與最佳時間統計
-                created_at = sp.get('createdAt') or sp.get('created_at')
-                interactions = sp.get('total_interactions', 0)
-                if created_at and len(created_at) >= 19:
-                    try:
-                        # 讀取 UTC 並轉台灣時間 (UTC+8)
-                        dt_utc = datetime.strptime(created_at[:19], "%Y-%m-%dT%H:%M:%S").replace(tzinfo=timezone.utc)
-                        dt_tw = dt_utc.astimezone(TW_TZ)
-                        hour_tw = dt_tw.hour
-                        hour_interactions[hour_tw] = hour_interactions.get(hour_tw, 0) + interactions
-                    except Exception: pass
+            category_stats["all"]["page_er_sum"] += page_engagement
+            category_stats["all"]["post_er_sum"] += post_engagement
+            category_stats["all"]["count"] += 1
+            if page_type in category_stats:
+                category_stats[page_type]["page_er_sum"] += page_engagement
+                category_stats[page_type]["post_er_sum"] += post_engagement
+                category_stats[page_type]["count"] += 1
 
-                # 抽取高互動貼文留言
-                if index < 5 and sp.get('permalinkUrl'):
-                    print(f"  └ 正在抓取最佳貼文留言進行 NLP 分析 ({index+1}/5)...")
-                    for c in fetch_post_comments(sp['permalinkUrl']):
-                        c_text = c.get('text') or c.get('message') or ''
-                        if c_text: all_comments_text.append(c_text)
+            final_data['matrix'].append({
+                "name": page_name, "x": post_engagement * 100, "y": page_engagement,
+                "color": '#10b981' if page_type == '基準粉專' else '#64748b' if page_type == '林保署體系' else '#f59e0b' if page_type == '屏東分署下轄' else '#3b82f6'
+            })
 
-                # 針對 Top 20 的分析處理
-                if index < 20:
-                    if text:
-                        texts_for_ckip.append(text)
-                        hashtags = re.findall(r'#([^\s#]+)', text)
-                        all_hashtags.extend(hashtags)
+            # 基準粉專專屬處理 (改用 Jieba)
+            if page_type == '基準粉專':
+                all_comments_text = []
+                post_texts = []
+                hour_interactions = {}
+                all_hashtags = []
+                all_keywords = []
+                
+                # 擴充繁體中文停用詞
+                stop_words = {'的', '是', '在', '了', '與', '和', '也', '有', '就', '我', '這', '都', '及', '為', '讓', '於', '以', '對', '我們', '大家', '一個', '可以', '不', '很', '會', '到', '上', '但', '這', '這', '那', '你', '他', '她'}
 
-                    er_pct = round((interactions / followers) * 100, 2) if followers > 0 else 0
-                    final_data['topPosts'].append({
-                        "date": dt_tw.strftime("%Y-%m-%d") if created_at else "未知",
-                        "content": str(text)[:60] + '...' if text else "無文字內容",
-                        "interactions": f"{interactions:,}",
-                        "er": f"{er_pct}%"
-                    })
-            
-            # CKIP 中研院斷詞運算
-            all_keywords = []
-            if texts_for_ckip:
-                print("  └ 執行 CKIP 中研院斷詞運算...")
-                ws_results = ws_driver(texts_for_ckip)
-                for ws_res in ws_results:
-                    for w in ws_res:
-                        w = w.strip()
-                        if len(w) > 1 and w not in stop_words and not w.encode().isalpha():
-                            all_keywords.append(w)
+                sorted_posts = sorted(posts, key=lambda x: x.get('total_interactions', 0), reverse=True)
+                
+                for index, sp in enumerate(sorted_posts):
+                    text = sp.get('text') or sp.get('message') or sp.get('description') or ''
+                    if text: post_texts.append(text)
 
-            best_hour = max(hour_interactions, key=hour_interactions.get) if hour_interactions else None
-            best_time_str = f"{best_hour:02d}:00 - {(best_hour+1)%24:02d}:00" if best_hour is not None else None
-            
-            post_sentiment = analyze_sentiment(post_texts)
-            comment_sentiment = analyze_sentiment(all_comments_text)
-            
-            top_hashtags = [{"tag": f"#{k}", "count": v} for k, v in collections.Counter(all_hashtags).most_common(10)]
-            top_keywords = [{"word": k, "count": v} for k, v in collections.Counter(all_keywords).most_common(10)]
+                    created_at = sp.get('createdAt') or sp.get('created_at')
+                    interactions = sp.get('total_interactions', 0)
+                    dt_tw = None
+                    if created_at and len(created_at) >= 19:
+                        try:
+                            dt_utc = datetime.strptime(created_at[:19], "%Y-%m-%dT%H:%M:%S").replace(tzinfo=timezone.utc)
+                            dt_tw = dt_utc.astimezone(TW_TZ)
+                            hour_tw = dt_tw.hour
+                            hour_interactions[hour_tw] = hour_interactions.get(hour_tw, 0) + interactions
+                        except Exception: pass
 
-            final_data['basePage'] = {
-                "name": page_name,
-                "followers": followers,
-                "pageEngagement": page_engagement,
-                "postEngagement": post_engagement,
-                "avgDailyPosts": round(valid_posts_count / 90, 1), # 改為 90 天平均
-                "bestPostingTime": best_time_str,
-                "sentimentPostPositive": post_sentiment["positive"] if post_sentiment else None,
-                "sentimentPostNegative": post_sentiment["negative"] if post_sentiment else None,
-                "commentSentimentPositive": comment_sentiment["positive"] if comment_sentiment else None,
-                "commentSentimentNegative": comment_sentiment["negative"] if comment_sentiment else None,
-                "topHashtags": top_hashtags,
-                "topKeywords": top_keywords
-            }
+                    if index < 5 and sp.get('permalinkUrl'):
+                        print(f"  └ 正在抓取最佳貼文留言進行 NLP 分析 ({index+1}/5)...")
+                        for c in fetch_post_comments(sp['permalinkUrl']):
+                            c_text = c.get('text') or c.get('message') or ''
+                            if c_text: all_comments_text.append(c_text)
+
+                    if index < 20:
+                        if text:
+                            # 萃取標籤與關鍵字 (Jieba)
+                            hashtags = re.findall(r'#([^\s#]+)', text)
+                            all_hashtags.extend(hashtags)
+                            
+                            words = jieba.cut(text)
+                            for w in words:
+                                w = w.strip()
+                                if len(w) > 1 and w not in stop_words and not w.encode().isalpha():
+                                    all_keywords.append(w)
+
+                        er_pct = round((interactions / followers) * 100, 2) if followers > 0 else 0
+                        date_str = dt_tw.strftime("%Y-%m-%d") if dt_tw else (created_at[:10] if created_at else "未知")
+                        final_data['topPosts'].append({
+                            "date": date_str,
+                            "content": str(text)[:60] + '...' if text else "無文字內容",
+                            "interactions": f"{interactions:,}",
+                            "er": f"{er_pct}%"
+                        })
+                
+                best_hour = max(hour_interactions, key=hour_interactions.get) if hour_interactions else None
+                best_time_str = f"{best_hour:02d}:00 - {(best_hour+1)%24:02d}:00" if best_hour is not None else None
+                
+                post_sentiment = analyze_sentiment(post_texts)
+                comment_sentiment = analyze_sentiment(all_comments_text)
+                
+                top_hashtags = [{"tag": f"#{k}", "count": v} for k, v in collections.Counter(all_hashtags).most_common(10)]
+                top_keywords = [{"word": k, "count": v} for k, v in collections.Counter(all_keywords).most_common(10)]
+
+                final_data['basePage'] = {
+                    "name": page_name,
+                    "followers": followers,
+                    "pageEngagement": page_engagement,
+                    "postEngagement": post_engagement,
+                    "avgDailyPosts": round(valid_posts_count / 90, 1),
+                    "bestPostingTime": best_time_str,
+                    "sentimentPostPositive": post_sentiment["positive"] if post_sentiment else None,
+                    "sentimentPostNegative": post_sentiment["negative"] if post_sentiment else None,
+                    "commentSentimentPositive": comment_sentiment["positive"] if comment_sentiment else None,
+                    "commentSentimentNegative": comment_sentiment["negative"] if comment_sentiment else None,
+                    "topHashtags": top_hashtags,
+                    "topKeywords": top_keywords
+                }
+
+        except Exception as e:
+            print(f"❌ 處理 {page_name} 時發生非預期錯誤: {e}")
+            traceback.print_exc()
 
     # 計算分類平均
     if category_stats["all"]["count"] > 0:
@@ -315,8 +328,9 @@ def main():
     try:
         with open(OUTPUT_JSON_PATH, 'w', encoding='utf-8') as f:
             json.dump(final_data, f, ensure_ascii=False, indent=4)
-        print(f"\n✅ 90 天資料更新完成！儲存至 {OUTPUT_JSON_PATH}")
+        print(f"\n✅ 90 天資料更新完成！成功儲存至 {OUTPUT_JSON_PATH}")
     except Exception as e:
+        print(f"❌ 儲存 JSON 發生錯誤: {e}")
         traceback.print_exc()
 
 if __name__ == "__main__":
