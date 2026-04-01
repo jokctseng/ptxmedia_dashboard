@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write 
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     
     steps:
       - name: 取得程式碼
@@ -35,5 +37,5 @@ jobs:
           git config --global user.name "Data-Bot"
           git config --global user.email "action@github.com"
           git add data.json
-          git commit -m "Auto-update: 每月社群數據爬取 (穩定版)" || echo "無資料變更"
+          git commit -m "Auto-update: 解決0互動問題與Node環境" || echo "無資料變更"
           git push
