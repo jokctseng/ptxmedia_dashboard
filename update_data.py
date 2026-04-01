@@ -17,7 +17,7 @@ BYCRAWL_API_KEY = os.environ.get('BYCRAWL_API_KEY', '您的_BYCRAWL_API_KEY')
 OUTPUT_JSON_PATH = 'data.json'
 HEADERS = {"x-api-key": BYCRAWL_API_KEY}
 
-# 設定台灣時區
+# 設定臺灣時區
 TW_TZ = timezone(timedelta(hours=8))
 
 def safe_int(val):
@@ -290,7 +290,7 @@ def main():
                     dt_tw = None
                     if created_at and len(created_at) >= 19:
                         try:
-                            # 轉換為台灣時間，並記錄 星期幾 + 幾點
+                            # 轉換為臺灣時間，並記錄 星期幾 + 幾點
                             dt_utc = datetime.strptime(created_at[:19], "%Y-%m-%dT%H:%M:%S").replace(tzinfo=timezone.utc)
                             dt_tw = dt_utc.astimezone(TW_TZ)
                             
