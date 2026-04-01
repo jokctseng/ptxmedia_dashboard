@@ -1,0 +1,40 @@
+name: 每月 1 號更新社群資料
+
+on:
+  schedule:
+    # 台灣時間每月1號中午12點 (UTC時間每月1號凌晨4點)
+    - cron: '0 4 1 * *'
+  workflow_dispatch: # 允許您在 GitHub 網頁上手動點擊「強制更新」
+
+jobs:
+  scrape-and-update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # 允許腳本寫入資料庫(data.json)
+    
+    steps:
+      - name: 取得程式碼
+        uses: actions/checkout@v3
+
+      - name: 設定 Python 環境
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: 安裝所需套件
+        run: |
+          pip install requests snownlp pandas
+
+      - name: 執行資料抓取與運算腳本
+        env:
+          # 從 GitHub Secrets 中讀取您的安全金鑰，不會外洩
+          BYCRAWL_API_KEY: ${{ secrets.BYCRAWL_API_KEY }} 
+        run: python update_data.py
+
+      - name: 儲存更新後的資料庫(data.json)到 Repo
+        run: |
+          git config --global user.name "Data-Bot"
+          git config --global user.email "action@github.com"
+          git add data.json
+          git commit -m "Auto-update: 每月社群數據爬取" || echo "無資料變更"
+          git push
