@@ -52,14 +52,14 @@ def fetch_page_profile(username):
         return None
 
 def fetch_page_posts_90_days(username):
-    """取得最近 90 天的貼文，具備翻頁功能"""
+    """取得最近 90 天的貼文 (修復置頂貼文中斷 Bug)"""
     if not username: return []
     all_posts = []
     cursor = None
     cutoff_date = datetime.now(timezone.utc) - timedelta(days=90)
     
-    # 最多翻 20 頁 (避免無限迴圈卡死 GitHub Action)
-    for _ in range(20):
+    # 抓取 10 頁 (約 100 篇貼文)，抓完後再來篩選 90 天內的，避免被置頂的舊貼文提早中斷
+    for _ in range(10):
         url = f"https://api.bycrawl.com/facebook/users/{username}/posts"
         params = {"count": 10} 
         if cursor: params["cursor"] = cursor
@@ -74,28 +74,30 @@ def fetch_page_posts_90_days(username):
             posts = data_block.get('posts', [])
             if not posts: break
             
-            reached_cutoff = False
-            for p in posts:
-                created_at = p.get('createdAt') or p.get('created_at')
-                if created_at:
-                    try:
-                        post_dt = datetime.strptime(created_at[:19], "%Y-%m-%dT%H:%M:%S").replace(tzinfo=timezone.utc)
-                        if post_dt < cutoff_date:
-                            reached_cutoff = True
-                            break
-                    except Exception: pass
-                all_posts.append(p)
-                
-            if reached_cutoff: break
+            all_posts.extend(posts)
             
             cursor = data_block.get('nextCursor')
-            if not cursor: break # 沒有下一頁了
+            if not cursor: break
             
         except Exception as e:
-            print(f"  [警告] 翻頁抓取貼文發生異常，中斷翻頁: {e}")
+            print(f"  [警告] 翻頁抓取貼文發生異常: {e}")
             break
             
-    return all_posts
+    # 篩選 90 天內的貼文 (過濾掉兩三年前的置頂貼文)
+    valid_posts = []
+    for p in all_posts:
+        created_at = p.get('createdAt') or p.get('created_at')
+        if created_at and len(created_at) >= 19:
+            try:
+                post_dt = datetime.strptime(created_at[:19], "%Y-%m-%dT%H:%M:%S").replace(tzinfo=timezone.utc)
+                if post_dt >= cutoff_date:
+                    valid_posts.append(p)
+            except:
+                valid_posts.append(p) # 確保日期解析失敗時仍保留該貼文
+        else:
+            valid_posts.append(p)
+            
+    return valid_posts
 
 def fetch_post_comments(post_url):
     if not post_url: return []
@@ -139,7 +141,6 @@ def get_csv_file():
 def main():
     print(f"啟動每月社群數據更新排程 (90天 & Jieba)... (執行時間: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')})")
     
-    # 尋找 CSV 檔案 (解決檔名可能為 '粉專資料追蹤清單 - 工作表1.csv' 的問題)
     csv_file = get_csv_file()
     if not csv_file:
         print("❌ 找不到任何 .csv 檔案，請確認檔案已上傳！")
@@ -201,7 +202,12 @@ def main():
             valid_posts_count = len(posts)
             
             for p in posts:
-                interactions = p.get('reactionCount', 0) + p.get('commentCount', 0) + p.get('shareCount', 0)
+                # 兼容多種 API 回傳的互動數名稱
+                likes = p.get('reactionCount', p.get('likeCount', p.get('likes', 0)))
+                comments = p.get('commentCount', p.get('comments', 0))
+                shares = p.get('shareCount', p.get('shares', 0))
+                
+                interactions = likes + comments + shares
                 total_interactions += interactions
                 p['total_interactions'] = interactions
                 
@@ -231,7 +237,9 @@ def main():
                 "color": '#10b981' if page_type == '基準粉專' else '#64748b' if page_type == '林保署體系' else '#f59e0b' if page_type == '屏東分署下轄' else '#3b82f6'
             })
 
-            # 基準粉專專屬處理 (改用 Jieba)
+            # ==========================================
+            # 基準粉專專屬深度處理 (最佳時間、關鍵字、留言)
+            # ==========================================
             if page_type == '基準粉專':
                 all_comments_text = []
                 post_texts = []
@@ -239,8 +247,8 @@ def main():
                 all_hashtags = []
                 all_keywords = []
                 
-                # 擴充繁體中文停用詞
-                stop_words = {'的', '是', '在', '了', '與', '和', '也', '有', '就', '我', '這', '都', '及', '為', '讓', '於', '以', '對', '我們', '大家', '一個', '可以', '不', '很', '會', '到', '上', '但', '這', '這', '那', '你', '他', '她'}
+                weekday_map = {0: "週一", 1: "週二", 2: "週三", 3: "週四", 4: "週五", 5: "週六", 6: "週日"}
+                stop_words = {'的', '是', '在', '了', '與', '和', '也', '有', '就', '我', '這', '都', '及', '為', '讓', '於', '以', '對', '我們', '大家', '一個', '可以', '不', '很', '會', '到', '上', '但', '這', '那', '你', '他', '她'}
 
                 sorted_posts = sorted(posts, key=lambda x: x.get('total_interactions', 0), reverse=True)
                 
@@ -253,25 +261,32 @@ def main():
                     dt_tw = None
                     if created_at and len(created_at) >= 19:
                         try:
+                            # 轉換為台灣時間，並記錄 星期幾 + 幾點
                             dt_utc = datetime.strptime(created_at[:19], "%Y-%m-%dT%H:%M:%S").replace(tzinfo=timezone.utc)
                             dt_tw = dt_utc.astimezone(TW_TZ)
-                            hour_tw = dt_tw.hour
-                            hour_interactions[hour_tw] = hour_interactions.get(hour_tw, 0) + interactions
+                            
+                            key = f"{weekday_map[dt_tw.weekday()]} {dt_tw.hour:02d}:00"
+                            hour_interactions[key] = hour_interactions.get(key, 0) + interactions
                         except Exception: pass
 
-                    if index < 5 and sp.get('permalinkUrl'):
-                        print(f"  └ 正在抓取最佳貼文留言進行 NLP 分析 ({index+1}/5)...")
-                        for c in fetch_post_comments(sp['permalinkUrl']):
+                    # 雙重相容 URL 欄位 (解決抓不到留言的問題)
+                    post_url = sp.get('permalinkUrl') or sp.get('url')
+                    
+                    if index < 5 and post_url:
+                        print(f"  └ 正在抓取貼文留言進行分析 ({index+1}/5)...")
+                        for c in fetch_post_comments(post_url):
                             c_text = c.get('text') or c.get('message') or ''
                             if c_text: all_comments_text.append(c_text)
 
                     if index < 20:
                         if text:
-                            # 萃取標籤與關鍵字 (Jieba)
+                            # 萃取標籤
                             hashtags = re.findall(r'#([^\s#]+)', text)
                             all_hashtags.extend(hashtags)
                             
-                            words = jieba.cut(text)
+                            # 去除標籤後，再進行關鍵字斷詞
+                            text_clean = re.sub(r'#\S+', '', text)
+                            words = jieba.cut(text_clean)
                             for w in words:
                                 w = w.strip()
                                 if len(w) > 1 and w not in stop_words and not w.encode().isalpha():
@@ -286,8 +301,8 @@ def main():
                             "er": f"{er_pct}%"
                         })
                 
-                best_hour = max(hour_interactions, key=hour_interactions.get) if hour_interactions else None
-                best_time_str = f"{best_hour:02d}:00 - {(best_hour+1)%24:02d}:00" if best_hour is not None else None
+                # 計算最佳時間 (總互動數最高的 星期X 幾點)
+                best_time_str = max(hour_interactions, key=hour_interactions.get) if hour_interactions else "資料不足"
                 
                 post_sentiment = analyze_sentiment(post_texts)
                 comment_sentiment = analyze_sentiment(all_comments_text)
