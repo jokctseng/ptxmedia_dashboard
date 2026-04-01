@@ -20,6 +20,13 @@ HEADERS = {"x-api-key": BYCRAWL_API_KEY}
 # 設定台灣時區
 TW_TZ = timezone(timedelta(hours=8))
 
+def safe_int(val):
+    """安全地將各種型態轉換為整數，避免字串或 None 造成錯誤"""
+    try:
+        return int(val) if val is not None else 0
+    except (ValueError, TypeError):
+        return 0
+
 # ==========================================
 # 2. 核心抓取模組
 # ==========================================
@@ -52,13 +59,12 @@ def fetch_page_profile(username):
         return None
 
 def fetch_page_posts_90_days(username):
-    """取得最近 90 天的貼文 (修復置頂貼文中斷 Bug)"""
+    """取得最近 90 天的貼文 (以粉專最新貼文為基準日往前推算)"""
     if not username: return []
     all_posts = []
     cursor = None
-    cutoff_date = datetime.now(timezone.utc) - timedelta(days=90)
     
-    # 抓取 10 頁 (約 100 篇貼文)，抓完後再來篩選 90 天內的，避免被置頂的舊貼文提早中斷
+    # 抓取最多 10 頁 (約 100 篇貼文)
     for _ in range(10):
         url = f"https://api.bycrawl.com/facebook/users/{username}/posts"
         params = {"count": 10} 
@@ -75,7 +81,6 @@ def fetch_page_posts_90_days(username):
             if not posts: break
             
             all_posts.extend(posts)
-            
             cursor = data_block.get('nextCursor')
             if not cursor: break
             
@@ -83,7 +88,26 @@ def fetch_page_posts_90_days(username):
             print(f"  [警告] 翻頁抓取貼文發生異常: {e}")
             break
             
-    # 篩選 90 天內的貼文 (過濾掉兩三年前的置頂貼文)
+    if not all_posts:
+        return []
+
+    # 找出該粉專最新的一篇貼文日期，當作 90 天的計算基準點，避免舊粉專全部歸零
+    latest_date = None
+    for p in all_posts:
+        created_at = p.get('createdAt') or p.get('created_at')
+        if created_at and len(created_at) >= 19:
+            try:
+                dt = datetime.strptime(created_at[:19], "%Y-%m-%dT%H:%M:%S").replace(tzinfo=timezone.utc)
+                if not latest_date or dt > latest_date:
+                    latest_date = dt
+            except: pass
+            
+    if not latest_date:
+        latest_date = datetime.now(timezone.utc)
+        
+    cutoff_date = latest_date - timedelta(days=90)
+    
+    # 篩選出該粉專活躍區間 90 天內的貼文 (可過濾掉極老的置頂文)
     valid_posts = []
     for p in all_posts:
         created_at = p.get('createdAt') or p.get('created_at')
@@ -93,10 +117,14 @@ def fetch_page_posts_90_days(username):
                 if post_dt >= cutoff_date:
                     valid_posts.append(p)
             except:
-                valid_posts.append(p) # 確保日期解析失敗時仍保留該貼文
+                valid_posts.append(p) 
         else:
             valid_posts.append(p)
             
+    # 如果過濾完還是 0 篇，至少給最近 10 篇確保有數據可算
+    if not valid_posts and all_posts:
+        valid_posts = all_posts[:10]
+        
     return valid_posts
 
 def fetch_post_comments(post_url):
@@ -149,7 +177,7 @@ def main():
 
     final_data = {
         "lastUpdated": datetime.now(TW_TZ).strftime("%Y-%m-%d %H:%M:%S"),
-        "dataScope": "最近 90 天貼文",
+        "dataScope": "最新 90 天活躍貼文",
         "basePage": {},
         "averages": {
             "all": {"name": "全部粉專平均", "pageEngagement": 0, "postEngagement": 0},
@@ -192,7 +220,8 @@ def main():
                 print("  └ 無法取得 profile_data，跳過此粉專。")
                 continue
             
-            followers = profile_data.get('followerCount', profile_data.get('likesCount', 0))
+            # 使用 safe_int 確保取得數字
+            followers = safe_int(profile_data.get('followerCount', profile_data.get('likesCount')))
             if followers == 0: 
                 print("  └ 粉絲數為 0，跳過。")
                 continue
@@ -202,10 +231,10 @@ def main():
             valid_posts_count = len(posts)
             
             for p in posts:
-                # 兼容多種 API 回傳的互動數名稱
-                likes = p.get('reactionCount', p.get('likeCount', p.get('likes', 0)))
-                comments = p.get('commentCount', p.get('comments', 0))
-                shares = p.get('shareCount', p.get('shares', 0))
+                # 兼容多種 API 回傳的互動數名稱，並安全轉為整數
+                likes = safe_int(p.get('reactionCount') or p.get('likeCount') or p.get('likes'))
+                comments = safe_int(p.get('commentCount') or p.get('comments'))
+                shares = safe_int(p.get('shareCount') or p.get('shares'))
                 
                 interactions = likes + comments + shares
                 total_interactions += interactions
@@ -217,7 +246,7 @@ def main():
                 post_engagement = round((total_interactions / (followers * valid_posts_count)) * 100, 4)
                 page_engagement = round((total_interactions / followers) * 100, 2)
             
-            print(f"  └ 粉絲: {followers:,} | 90天內貼文: {valid_posts_count} | 粉專互動率: {page_engagement}%")
+            print(f"  └ 粉絲: {followers:,} | 有效貼文: {valid_posts_count} | 總互動: {total_interactions} | 粉專互動率: {page_engagement}%")
 
             final_data['allPages'].append({
                 "name": page_name, "type": page_type, "followers": followers,
@@ -315,7 +344,7 @@ def main():
                     "followers": followers,
                     "pageEngagement": page_engagement,
                     "postEngagement": post_engagement,
-                    "avgDailyPosts": round(valid_posts_count / 90, 1),
+                    "avgDailyPosts": round(valid_posts_count / 90, 1) if valid_posts_count else 0,
                     "bestPostingTime": best_time_str,
                     "sentimentPostPositive": post_sentiment["positive"] if post_sentiment else None,
                     "sentimentPostNegative": post_sentiment["negative"] if post_sentiment else None,
@@ -343,7 +372,7 @@ def main():
     try:
         with open(OUTPUT_JSON_PATH, 'w', encoding='utf-8') as f:
             json.dump(final_data, f, ensure_ascii=False, indent=4)
-        print(f"\n✅ 90 天資料更新完成！成功儲存至 {OUTPUT_JSON_PATH}")
+        print(f"\n✅ 資料更新完成！成功儲存至 {OUTPUT_JSON_PATH}")
     except Exception as e:
         print(f"❌ 儲存 JSON 發生錯誤: {e}")
         traceback.print_exc()
