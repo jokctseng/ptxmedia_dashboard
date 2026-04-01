@@ -21,12 +21,9 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: 安裝所需套件 (包含中研院 CKIP 與 PyTorch)
+      - name: 安裝所需套件 (輕量穩定版)
         run: |
-          pip install requests snownlp pandas
-          # 安裝輕量版 CPU PyTorch 以節省 GitHub Action 執行時間
-          pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
-          pip install transformers ckip-transformers
+          pip install requests snownlp pandas jieba
 
       - name: 執行資料抓取與運算腳本
         env:
@@ -38,5 +35,5 @@ jobs:
           git config --global user.name "Data-Bot"
           git config --global user.email "action@github.com"
           git add data.json
-          git commit -m "Auto-update: 每月社群數據爬取 (90天 & CKIP斷詞)" || echo "無資料變更"
+          git commit -m "Auto-update: 每月社群數據爬取 (穩定版)" || echo "無資料變更"
           git push
