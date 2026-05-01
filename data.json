@@ -1,5 +1,5 @@
 {
-    "lastUpdated": "2026-04-16 15:35:25",
+    "lastUpdated": "2026-05-01 14:32:38",
     "dataScope": "最近 90 天活躍貼文",
     "basePage": {
         "name": "林業及自然保育署屏東分署",
@@ -27,16 +27,16 @@
         {
             "name": "林業及自然保育署",
             "type": "林保署體系",
-            "followers": 273000,
-            "pageEngagement": 1.24,
-            "postEngagement": 0.1241
+            "followers": 274000,
+            "pageEngagement": 0,
+            "postEngagement": 0
         },
         {
             "name": "林業及自然保育署臺東分署",
             "type": "林保署體系",
             "followers": 23000,
-            "pageEngagement": 6.44,
-            "postEngagement": 0.6443
+            "pageEngagement": 12.5,
+            "postEngagement": 1.2504
         },
         {
             "name": "林業及自然保育署臺中分署",
@@ -48,23 +48,23 @@
         {
             "name": "林業及自然保育署嘉義分署",
             "type": "林保署體系",
-            "followers": 7100,
-            "pageEngagement": 29.75,
-            "postEngagement": 2.9746
+            "followers": 7300,
+            "pageEngagement": 14.32,
+            "postEngagement": 1.4315
         },
         {
             "name": "林業及自然保育署花蓮分署",
             "type": "林保署體系",
             "followers": 24000,
-            "pageEngagement": 3.95,
-            "postEngagement": 0.3954
+            "pageEngagement": 2.98,
+            "postEngagement": 0.2983
         },
         {
             "name": "林業保育署宜蘭分署",
             "type": "林保署體系",
-            "followers": 1100,
-            "pageEngagement": 31.55,
-            "postEngagement": 3.1545
+            "followers": 1300,
+            "pageEngagement": 0,
+            "postEngagement": 0
         },
         {
             "name": "阿里山林業鐵路及文化資產管理處Alishan Forest Railway and Cultural Heritage Office",
@@ -76,7 +76,7 @@
         {
             "name": "林業保育署航測及遙測分署-360 Face",
             "type": "林保署體系",
-            "followers": 14000,
+            "followers": 15000,
             "pageEngagement": 0,
             "postEngagement": 0
         },
@@ -84,50 +84,50 @@
             "name": "林後四林平地森林園區",
             "type": "屏東分署下轄",
             "followers": 25000,
-            "pageEngagement": 3.98,
-            "postEngagement": 0.3984
+            "pageEngagement": 4.52,
+            "postEngagement": 0.452
         },
         {
             "name": "雙流國家森林遊樂區",
             "type": "屏東分署下轄",
             "followers": 20000,
-            "pageEngagement": 8.53,
-            "postEngagement": 0.8525
+            "pageEngagement": 9.27,
+            "postEngagement": 0.927
         },
         {
             "name": "墾丁國家森林遊樂區",
             "type": "屏東分署下轄",
             "followers": 14000,
-            "pageEngagement": 0,
-            "postEngagement": 0
+            "pageEngagement": 3.9,
+            "postEngagement": 0.39
         },
         {
             "name": "雙流自然教育中心",
             "type": "屏東分署下轄",
             "followers": 15000,
-            "pageEngagement": 0,
-            "postEngagement": 0
+            "pageEngagement": 6.89,
+            "postEngagement": 0.6887
         },
         {
             "name": "i屏東～愛屏東",
             "type": "屏東縣旅遊",
             "followers": 237000,
-            "pageEngagement": 0.27,
-            "postEngagement": 0.0273
+            "pageEngagement": 0,
+            "postEngagement": 0
         },
         {
             "name": "屏東go好玩-屏東縣政府交通旅遊處",
             "type": "屏東縣旅遊",
             "followers": 105000,
-            "pageEngagement": 0.49,
-            "postEngagement": 0.0492
+            "pageEngagement": 0.34,
+            "postEngagement": 0.034
         },
         {
             "name": "大鵬灣國家風景區管理處 Dapeng Bay NSA",
             "type": "屏東縣旅遊",
             "followers": 84000,
-            "pageEngagement": 6.99,
-            "postEngagement": 0.6988
+            "pageEngagement": 0,
+            "postEngagement": 0
         }
     ]
 }
