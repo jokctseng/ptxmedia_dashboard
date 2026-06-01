@@ -1,133 +1,171 @@
 {
-    "lastUpdated": "2026-05-01 14:32:38",
+    "lastUpdated": "2026-06-01 17:15:05",
     "dataScope": "最近 90 天活躍貼文",
     "basePage": {
         "name": "林業及自然保育署屏東分署",
-        "followers": 14000,
-        "pageEngagement": 0,
-        "postEngagement": 0,
-        "avgDailyPosts": 0.0,
-        "bestPostingTime": "資料不足",
-        "sentimentPostPositive": null,
-        "sentimentPostNegative": null,
-        "commentSentimentPositive": null,
-        "commentSentimentNegative": null,
-        "topHashtags": [],
-        "topKeywords": [],
-        "topPosts": []
+        "followers": 15000,
+        "pageEngagement": 3.31,
+        "postEngagement": 1.1044,
+        "avgDailyPosts": 0.03,
+        "bestPostingTime": "週五 20:00",
+        "sentimentPostPositive": 0,
+        "sentimentPostNegative": 100,
+        "commentSentimentPositive": 50,
+        "commentSentimentNegative": 50,
+        "topHashtags": [
+            {
+                "tag": "#林業及自然保育署屏東分署",
+                "count": 2
+            },
+            {
+                "tag": "#複層之森",
+                "count": 1
+            },
+            {
+                "tag": "#變更之地",
+                "count": 1
+            },
+            {
+                "tag": "#林相變更",
+                "count": 1
+            },
+            {
+                "tag": "#南方林業史",
+                "count": 1
+            },
+            {
+                "tag": "#藤枝",
+                "count": 1
+            },
+            {
+                "tag": "#布農族",
+                "count": 1
+            },
+            {
+                "tag": "#水雉",
+                "count": 1
+            },
+            {
+                "tag": "#野蓮田",
+                "count": 1
+            },
+            {
+                "tag": "#保育共生地",
+                "count": 1
+            }
+        ],
+        "topKeywords": [
+            {
+                "word": "水雉",
+                "count": 9
+            },
+            {
+                "word": "加映",
+                "count": 6
+            },
+            {
+                "word": "林業",
+                "count": 5
+            },
+            {
+                "word": "政策",
+                "count": 5
+            },
+            {
+                "word": "老師",
+                "count": 5
+            },
+            {
+                "word": "歷史",
+                "count": 5
+            },
+            {
+                "word": "之森",
+                "count": 4
+            },
+            {
+                "word": "朋友",
+                "count": 4
+            },
+            {
+                "word": "一起",
+                "count": 4
+            },
+            {
+                "word": "林相變",
+                "count": 4
+            }
+        ],
+        "topPosts": [
+            {
+                "date": "2026-05-22",
+                "content": "🌲直擊藤枝林間的震撼迴響—《複層之森》臺北加映場精彩回顧，錯過別遺憾，7月臺中加映場接棒！🎬\n\n【活動圓滿落幕📣】5/ ...",
+                "interactions": "284",
+                "er": "1.89%"
+            },
+            {
+                "date": "2026-05-28",
+                "content": "5/29小棧水雉講座實體即將額滿，也歡迎報名線上聽講。也歡迎參加6/7活動，跟屏東鳥會老師去海豐濕地看水雉！...",
+                "interactions": "140",
+                "er": "0.93%"
+            },
+            {
+                "date": "2026-05-28",
+                "content": "【來屏東林業服務小棧　聽水雉如何擺脫單身鳥日子🐦】\n\n在高雄美濃濕地，一群人正默默替水雉守護「成家立業」的機會。\n林業及...",
+                "interactions": "73",
+                "er": "0.49%"
+            }
+        ]
     },
     "allPages": [
         {
             "name": "林業及自然保育署屏東分署",
             "type": "基準粉專",
-            "followers": 14000,
-            "pageEngagement": 0,
-            "postEngagement": 0
-        },
-        {
-            "name": "林業及自然保育署",
-            "type": "林保署體系",
-            "followers": 274000,
-            "pageEngagement": 0,
-            "postEngagement": 0
+            "followers": 15000,
+            "pageEngagement": 3.31,
+            "postEngagement": 1.1044
         },
         {
             "name": "林業及自然保育署臺東分署",
             "type": "林保署體系",
             "followers": 23000,
-            "pageEngagement": 12.5,
-            "postEngagement": 1.2504
-        },
-        {
-            "name": "林業及自然保育署臺中分署",
-            "type": "林保署體系",
-            "followers": 19000,
-            "pageEngagement": 0,
-            "postEngagement": 0
+            "pageEngagement": 5.83,
+            "postEngagement": 0.5826
         },
         {
             "name": "林業及自然保育署嘉義分署",
             "type": "林保署體系",
-            "followers": 7300,
-            "pageEngagement": 14.32,
-            "postEngagement": 1.4315
-        },
-        {
-            "name": "林業及自然保育署花蓮分署",
-            "type": "林保署體系",
-            "followers": 24000,
-            "pageEngagement": 2.98,
-            "postEngagement": 0.2983
-        },
-        {
-            "name": "林業保育署宜蘭分署",
-            "type": "林保署體系",
-            "followers": 1300,
-            "pageEngagement": 0,
-            "postEngagement": 0
-        },
-        {
-            "name": "阿里山林業鐵路及文化資產管理處Alishan Forest Railway and Cultural Heritage Office",
-            "type": "林保署體系",
-            "followers": 59000,
-            "pageEngagement": 0,
-            "postEngagement": 0
+            "followers": 7700,
+            "pageEngagement": 4.9,
+            "postEngagement": 1.632
         },
         {
             "name": "林業保育署航測及遙測分署-360 Face",
             "type": "林保署體系",
             "followers": 15000,
-            "pageEngagement": 0,
-            "postEngagement": 0
+            "pageEngagement": 2.26,
+            "postEngagement": 0.7533
         },
         {
             "name": "林後四林平地森林園區",
             "type": "屏東分署下轄",
             "followers": 25000,
-            "pageEngagement": 4.52,
-            "postEngagement": 0.452
+            "pageEngagement": 3.58,
+            "postEngagement": 0.3973
         },
         {
             "name": "雙流國家森林遊樂區",
             "type": "屏東分署下轄",
             "followers": 20000,
-            "pageEngagement": 9.27,
-            "postEngagement": 0.927
-        },
-        {
-            "name": "墾丁國家森林遊樂區",
-            "type": "屏東分署下轄",
-            "followers": 14000,
-            "pageEngagement": 3.9,
-            "postEngagement": 0.39
-        },
-        {
-            "name": "雙流自然教育中心",
-            "type": "屏東分署下轄",
-            "followers": 15000,
-            "pageEngagement": 6.89,
-            "postEngagement": 0.6887
-        },
-        {
-            "name": "i屏東～愛屏東",
-            "type": "屏東縣旅遊",
-            "followers": 237000,
-            "pageEngagement": 0,
-            "postEngagement": 0
+            "pageEngagement": 1.2,
+            "postEngagement": 0.4
         },
         {
             "name": "屏東go好玩-屏東縣政府交通旅遊處",
             "type": "屏東縣旅遊",
-            "followers": 105000,
-            "pageEngagement": 0.34,
-            "postEngagement": 0.034
-        },
-        {
-            "name": "大鵬灣國家風景區管理處 Dapeng Bay NSA",
-            "type": "屏東縣旅遊",
-            "followers": 84000,
-            "pageEngagement": 0,
-            "postEngagement": 0
+            "followers": 107000,
+            "pageEngagement": 0.47,
+            "postEngagement": 0.0474
         }
     ]
 }
