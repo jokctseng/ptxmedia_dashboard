@@ -23,13 +23,19 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: 安裝所需套件 (輕量穩定版)
+      - name: 安裝所需套件
         run: |
-          pip install requests snownlp pandas jieba
+          pip install -r requirements.txt
 
       - name: 執行資料抓取與運算腳本
         env:
-          BYCRAWL_API_KEY: ${{ secrets.BYCRAWL_API_KEY }} 
+          BYCRAWL_API_KEY: ${{ secrets.BYCRAWL_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ENABLE_LLM_ANALYSIS: "true"
+          OPENAI_MODEL: "gpt-5-nano"
+          LLM_POST_LIMIT: "1000"
+          LLM_COMMENT_POST_LIMIT: "5"
+          LLM_COMMENTS_PER_POST: "20"
         run: python update_data.py
 
       - name: 儲存更新後的資料庫(data.json)到 Repo
@@ -37,5 +43,5 @@ jobs:
           git config --global user.name "Data-Bot"
           git config --global user.email "action@github.com"
           git add data.json
-          git commit -m "Auto-update: 解決0互動問題與Node環境" || echo "無資料變更"
+          git commit -m "Auto-update social dashboard data" || echo "無資料變更"
           git push
