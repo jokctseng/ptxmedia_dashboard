@@ -121,10 +121,15 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 tooltip-container">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
                     <h3 class="font-bold text-slate-800 mb-2 flex justify-between items-center">
                         <span>粉專表現矩陣 (互動品質對比)</span>
-                        <i class="fa-solid fa-circle-info text-slate-400 cursor-help text-sm"></i>
+                        <span class="relative tooltip-container inline-flex" title="每個點代表一個粉專。X 軸是貼文互動率，Y 軸是粉專互動率；越靠右上代表單篇內容互動品質與整體粉專熱度都較高。">
+                            <i class="fa-solid fa-circle-info text-slate-400 cursor-help text-sm"></i>
+                            <span class="tooltip-text invisible opacity-0 absolute z-10 right-0 top-full mt-2 w-72 p-3 bg-slate-800 text-white text-xs rounded shadow-lg normal-case tracking-normal leading-relaxed">
+                                每個點代表一個粉專。X 軸為貼文互動率，Y 軸為粉專互動率；越靠右上代表單篇內容互動品質與整體粉專熱度都較高。
+                            </span>
+                        </span>
                     </h3>
                     <p class="text-xs text-slate-500 mb-6 border-l-2 border-emerald-400 pl-2 leading-relaxed">
                         <span class="font-semibold text-slate-600">計算方式：</span><br>
@@ -142,7 +147,7 @@
                 </div>
 
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-                    <h3 class="font-bold text-slate-800 mb-4">內容發布與 NLP 深度分析（全部粉專）</h3>
+                    <h3 class="font-bold text-slate-800 mb-4">內容發布與 NLP 深度分析（基準粉專）</h3>
                     <div class="space-y-4 mb-6">
                         <div class="flex justify-between items-center border-b border-slate-100 pb-2">
                             <span class="text-slate-600 text-sm">平均每日貼文</span>
@@ -205,7 +210,7 @@
 
             <div id="semanticSection" class="hidden bg-white p-6 rounded-xl shadow-sm border border-slate-100 mb-8">
                 <div class="flex items-center justify-between gap-4 mb-5">
-                    <h3 class="font-bold text-slate-800">LLM 語意分類</h3>
+                    <h3 class="font-bold text-slate-800">基準粉專 LLM 語意分類</h3>
                     <span id="semanticStatus" class="text-xs bg-indigo-50 text-indigo-700 px-2 py-1 rounded"></span>
                 </div>
                 <div id="semanticEnabled" class="grid grid-cols-1 lg:grid-cols-3 gap-5">
@@ -263,7 +268,7 @@
                     lastUpdated: rawData.lastUpdated,
                     dataScope: rawData.dataScope,
                     basePage: rawData.basePage || {},
-                    contentAnalysis: rawData.contentAnalysis || rawData.basePage || {},
+                    contentAnalysis: rawData.contentAnalysis && Object.keys(rawData.contentAnalysis).length > 0 ? rawData.contentAnalysis : (rawData.basePage || {}),
                     semanticAnalysis: rawData.semanticAnalysis || { enabled: false },
                     allPages: rawData.allPages || [],
                     averages: {
@@ -545,17 +550,4 @@
                 return `
                     <tr class="border-b border-slate-100 ${bgClass}">
                         <td class="p-4 align-middle ${isBase ? 'font-bold text-emerald-700' : 'font-medium text-slate-700'}">
-                            ${p.name} ${isBase ? '<span class="inline-block align-middle text-[10px] ml-1.5 bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded leading-none">基準</span>' : ''}
-                        </td>
-                        <td class="p-4 w-32 align-middle">${renderBar(p.followers, maxFollowers, v => v.toLocaleString())}</td>
-                        <td class="p-4 w-32 align-middle">${renderBar(p.pageEngagement, maxPageER, v => v + '%')}</td>
-                        <td class="p-4 w-32 align-middle">${renderBar(p.postEngagement, maxPostER, v => v + '%')}</td>
-                    </tr>
-                `;
-            }).join('');
-        }
-
-        window.addEventListener('DOMContentLoaded', fetchRealData);
-    </script>
-</body>
-</html>
+                            ${p.name} ${isBase ? '<span class="inline-block align-middle text-[10px] ml-1.5 bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded leading-none">基準</span>'
