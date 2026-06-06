@@ -27,7 +27,7 @@ except ImportError:
 # ==========================================
 OUTPUT_JSON_PATH = 'data.json'
 POST_LOOKBACK_DAYS = 90
-POSTS_PER_REQUEST = int(os.environ.get('POSTS_PER_REQUEST', '100'))
+POSTS_PER_REQUEST = min(int(os.environ.get('POSTS_PER_REQUEST', '10')), 10)
 MAX_POST_PAGES = int(os.environ.get('MAX_POST_PAGES', '200'))
 SENTIMENT_POSITIVE_THRESHOLD = float(os.environ.get('SENTIMENT_POSITIVE_THRESHOLD', '0.65'))
 SENTIMENT_NEGATIVE_THRESHOLD = float(os.environ.get('SENTIMENT_NEGATIVE_THRESHOLD', '0.35'))
