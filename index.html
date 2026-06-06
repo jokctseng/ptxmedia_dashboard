@@ -142,7 +142,7 @@
                 </div>
 
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-                    <h3 class="font-bold text-slate-800 mb-4">內容發布與 NLP 深度分析</h3>
+                    <h3 class="font-bold text-slate-800 mb-4">內容發布與 NLP 深度分析（全部粉專）</h3>
                     <div class="space-y-4 mb-6">
                         <div class="flex justify-between items-center border-b border-slate-100 pb-2">
                             <span class="text-slate-600 text-sm">平均每日貼文</span>
@@ -154,9 +154,14 @@
                         </div>
                     </div>
 
-                    <h4 class="text-xs font-semibold text-slate-500 mb-4 mt-6 uppercase tracking-wider tooltip-container flex items-center">
+                    <h4 class="text-xs font-semibold text-slate-500 mb-4 mt-6 uppercase tracking-wider flex items-center">
                         <i class="fa-solid fa-brain mr-1.5 text-indigo-400"></i> AI 情緒語意分析 
-                        <i class="fa-solid fa-circle-info text-slate-400 cursor-help text-[10px] ml-1"></i>
+                        <span class="relative tooltip-container inline-flex ml-1" title="情緒分析使用 SnowNLP 三分法估算貼文與留言的正向、中性、負向比例；資訊型內容常屬中性，結果僅供趨勢參考。">
+                            <i class="fa-solid fa-circle-info text-slate-400 cursor-help text-[10px]"></i>
+                            <span class="tooltip-text invisible opacity-0 absolute z-10 left-1/2 -translate-x-1/2 top-full mt-2 w-72 p-3 bg-slate-800 text-white text-xs rounded shadow-lg normal-case tracking-normal leading-relaxed">
+                                情緒分析使用 SnowNLP 三分法估算貼文與留言的正向、中性、負向比例。政府公告、活動資訊、保育知識等內容常屬中性，結果適合觀察趨勢，不宜當作精準民意判讀。
+                            </span>
+                        </span>
                     </h4>
                     
                     <div id="sentiment-container" class="space-y-5">
@@ -167,6 +172,7 @@
                             </div>
                             <div class="w-full bg-slate-100 rounded-full h-2.5 flex overflow-hidden">
                                 <div class="h-2.5 bg-emerald-500 transition-all duration-700" id="barPostPos" style="width: 0%"></div>
+                                <div class="h-2.5 bg-slate-300 transition-all duration-700" id="barPostNeutral" style="width: 0%"></div>
                                 <div class="h-2.5 bg-rose-500 transition-all duration-700" id="barPostNeg" style="width: 0%"></div>
                             </div>
                         </div>
@@ -177,6 +183,7 @@
                             </div>
                             <div class="w-full bg-slate-100 rounded-full h-2.5 flex overflow-hidden">
                                 <div class="h-2.5 bg-emerald-500 transition-all duration-700" id="barCommentPos" style="width: 0%"></div>
+                                <div class="h-2.5 bg-slate-300 transition-all duration-700" id="barCommentNeutral" style="width: 0%"></div>
                                 <div class="h-2.5 bg-rose-500 transition-all duration-700" id="barCommentNeg" style="width: 0%"></div>
                             </div>
                         </div>
@@ -196,14 +203,36 @@
                 </div>
             </div>
 
+            <div id="semanticSection" class="hidden bg-white p-6 rounded-xl shadow-sm border border-slate-100 mb-8">
+                <div class="flex items-center justify-between gap-4 mb-5">
+                    <h3 class="font-bold text-slate-800">LLM 語意分類</h3>
+                    <span id="semanticStatus" class="text-xs bg-indigo-50 text-indigo-700 px-2 py-1 rounded"></span>
+                </div>
+                <div id="semanticEnabled" class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                    <div>
+                        <h4 class="text-xs font-semibold text-slate-500 mb-3 uppercase tracking-wider">貼文主題分布</h4>
+                        <div id="semanticTopics" class="space-y-2"></div>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-semibold text-slate-500 mb-3 uppercase tracking-wider">溝通意圖分布</h4>
+                        <div id="semanticIntents" class="space-y-2"></div>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-semibold text-slate-500 mb-3 uppercase tracking-wider">留言洞察樣本</h4>
+                        <div id="semanticComments" class="space-y-2 text-sm text-slate-600"></div>
+                    </div>
+                </div>
+            </div>
+
              <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden mb-8">
                 <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                    <h3 class="font-bold text-slate-800">互動前 10 名貼文清單</h3>
+                    <h3 class="font-bold text-slate-800">全體粉專互動前 10 名貼文清單</h3>
                 </div>
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse min-w-[600px]">
+                    <table class="w-full text-left border-collapse min-w-[720px]">
                         <thead>
                             <tr class="bg-white text-slate-500 text-sm border-b border-slate-200">
+                                <th class="p-4 font-semibold w-44">粉專</th>
                                 <th class="p-4 font-semibold w-32">發布日期</th>
                                 <th class="p-4 font-semibold">貼文摘要內容</th>
                                 <th class="p-4 font-semibold text-right w-32">總互動數</th>
@@ -234,6 +263,8 @@
                     lastUpdated: rawData.lastUpdated,
                     dataScope: rawData.dataScope,
                     basePage: rawData.basePage || {},
+                    contentAnalysis: rawData.contentAnalysis || rawData.basePage || {},
+                    semanticAnalysis: rawData.semanticAnalysis || { enabled: false },
                     allPages: rawData.allPages || [],
                     averages: {
                         all: { name: "全部粉專平均", pageEngagement: 0, postEngagement: 0, count: 0 },
@@ -305,29 +336,36 @@
             document.getElementById('valFollowers').innerText = (base.followers || 0).toLocaleString();
             document.getElementById('valPageER').innerText = base.pageEngagement || 0;
             document.getElementById('valPostER').innerText = base.postEngagement || 0;
-            document.getElementById('valAvgDaily').innerText = base.avgDailyPosts || '-';
-            document.getElementById('valBestTime').innerText = base.bestPostingTime || '資料不足';
+
+            const analysis = dashboardData.contentAnalysis || base;
+            document.getElementById('valAvgDaily').innerText = analysis.avgDailyPosts || '-';
+            document.getElementById('valBestTime').innerText = analysis.bestPostingTime || '資料不足';
             
-            const fillSentiment = (type, posVal, negVal) => {
+            const fillSentiment = (type, posVal, neutralVal, negVal, sampleCount) => {
                 const textEl = document.getElementById(`val${type}SentText`);
                 const barPos = document.getElementById(`bar${type}Pos`);
+                const barNeutral = document.getElementById(`bar${type}Neutral`);
                 const barNeg = document.getElementById(`bar${type}Neg`);
                 
                 if (posVal === null || posVal === undefined) {
                     textEl.innerText = "樣本不足";
                     textEl.className = "text-slate-400 text-xs font-medium";
-                    barPos.style.width = "0%"; barNeg.style.width = "0%";
+                    barPos.style.width = "0%"; barNeutral.style.width = "0%"; barNeg.style.width = "0%";
                 } else {
-                    textEl.innerHTML = `<span class="text-emerald-600">${posVal}% 正向</span> / <span class="text-rose-500">${negVal}% 負向</span>`;
+                    const hasNeutral = neutralVal !== null && neutralVal !== undefined;
+                    const neutral = hasNeutral ? neutralVal : 0;
+                    const sampleText = sampleCount ? `，樣本 ${sampleCount}` : '';
+                    textEl.innerHTML = `<span class="text-emerald-600">${posVal}% 正向</span> / <span class="text-slate-500">${neutral}% 中性</span> / <span class="text-rose-500">${negVal}% 負向</span><span class="text-slate-400">${sampleText}</span>`;
                     barPos.style.width = `${posVal}%`; barNeg.style.width = `${negVal}%`;
+                    barNeutral.style.width = `${neutral}%`;
                 }
             };
-            fillSentiment('Post', base.sentimentPostPositive, base.sentimentPostNegative);
-            fillSentiment('Comment', base.commentSentimentPositive, base.commentSentimentNegative);
+            fillSentiment('Post', analysis.sentimentPostPositive, analysis.sentimentPostNeutral, analysis.sentimentPostNegative, analysis.sentimentPostSampleCount);
+            fillSentiment('Comment', analysis.commentSentimentPositive, analysis.commentSentimentNeutral, analysis.commentSentimentNegative, analysis.commentSentimentSampleCount);
 
             const hashContainer = document.getElementById('hashtagContainer');
-            if (base.topHashtags && base.topHashtags.length > 0) {
-                hashContainer.innerHTML = base.topHashtags.map(h => 
+            if (analysis.topHashtags && analysis.topHashtags.length > 0) {
+                hashContainer.innerHTML = analysis.topHashtags.map(h => 
                     `<span class="bg-blue-50 text-blue-700 text-xs px-2.5 py-1 rounded-md border border-blue-100">${h.tag} <span class="opacity-60 ml-0.5">(${h.count})</span></span>`
                 ).join('');
             } else {
@@ -335,8 +373,8 @@
             }
 
             const keyContainer = document.getElementById('keywordContainer');
-            if (base.topKeywords && base.topKeywords.length > 0) {
-                keyContainer.innerHTML = base.topKeywords.map((k, index) => {
+            if (analysis.topKeywords && analysis.topKeywords.length > 0) {
+                keyContainer.innerHTML = analysis.topKeywords.map((k, index) => {
                     const sizeClass = index < 3 ? 'text-lg font-bold text-emerald-700' : index < 6 ? 'text-sm font-semibold text-slate-700' : 'text-xs text-slate-500';
                     return `<span class="${sizeClass} bg-slate-50 px-1.5 py-0.5 rounded border border-slate-100">${k.word}</span>`;
                 }).join('');
@@ -346,21 +384,65 @@
 
             const tableBody = document.getElementById('postTableBody');
             tableBody.innerHTML = ''; 
-            if(base.topPosts && base.topPosts.length > 0) {
-                base.topPosts.slice(0, 10).forEach(post => {
+            if(analysis.topPosts && analysis.topPosts.length > 0) {
+                analysis.topPosts.slice(0, 10).forEach(post => {
                     tableBody.innerHTML += `
                         <tr class="border-b border-slate-100 hover:bg-slate-50">
+                            <td class="p-4 text-slate-600 font-medium">${post.page || base.name || '-'}</td>
                             <td class="p-4 text-slate-500 whitespace-nowrap">${post.date}</td>
                             <td class="p-4 text-slate-800 font-medium">${post.content}</td>
-                            <td class="p-4 text-right text-slate-700">${post.interactions}</td>
+                            <td class="p-4 text-right text-slate-700">${post.interactionsText || post.interactions}</td>
                             <td class="p-4 text-right text-emerald-600 font-bold">${post.er}</td>
                         </tr>`;
                 });
             } else {
-                tableBody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-400">目前無貼文資料</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-400">目前無貼文資料</td></tr>';
             }
 
             initCharts();
+            renderSemanticAnalysis();
+        }
+
+        function renderSemanticAnalysis() {
+            const semantic = dashboardData.semanticAnalysis || { enabled: false };
+            const section = document.getElementById('semanticSection');
+            const status = document.getElementById('semanticStatus');
+
+            if (!semantic.enabled) {
+                section.classList.add('hidden');
+                return;
+            }
+
+            section.classList.remove('hidden');
+            status.innerText = `${semantic.model || 'LLM'}｜貼文 ${semantic.postSampleCount || 0} 篇｜留言貼文 ${semantic.commentPostSampleCount || 0} 篇`;
+
+            const renderCounts = (items) => {
+                if (!items || items.length === 0) return '<p class="text-sm text-slate-400">樣本不足</p>';
+                const max = Math.max(...items.map(i => i.count)) || 1;
+                return items.slice(0, 6).map(i => `
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-slate-700">${i.label}</span>
+                            <span class="text-slate-500">${i.count}</span>
+                        </div>
+                        <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-1.5 bg-indigo-500 rounded-full" style="width:${Math.max(4, (i.count / max) * 100)}%"></div>
+                        </div>
+                    </div>
+                `).join('');
+            };
+
+            document.getElementById('semanticTopics').innerHTML = renderCounts(semantic.topicCounts);
+            document.getElementById('semanticIntents').innerHTML = renderCounts(semantic.intentCounts);
+            document.getElementById('semanticComments').innerHTML = semantic.commentResults && semantic.commentResults.length > 0
+                ? semantic.commentResults.slice(0, 3).map(r => `
+                    <div class="border border-slate-100 rounded-md p-3">
+                        <div class="font-medium text-slate-700">${r.mainConcern}｜${r.audienceSentiment}</div>
+                        <div class="text-xs text-slate-400 mt-1">${r.page || ''} ${r.date || ''}</div>
+                        <p class="mt-2 leading-relaxed">${r.actionableInsight || '無明確洞察'}</p>
+                    </div>
+                `).join('')
+                : '<p class="text-sm text-slate-400">尚無留言洞察</p>';
         }
 
         function initCharts() {
