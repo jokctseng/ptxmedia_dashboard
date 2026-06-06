@@ -598,6 +598,7 @@ def main():
         return
 
     all_recent_posts = []
+    base_recent_posts = []
 
     for page in pages:
         try:
@@ -658,6 +659,7 @@ def main():
 
             # 基準粉專深度處理
             if page_type == '基準粉專':
+                base_recent_posts = list(posts)
                 final_data['basePage'] = {
                     "name": page_name,
                     "followers": followers,
@@ -674,10 +676,11 @@ def main():
             print(f"❌ 處理 {page_name} 時發生錯誤: {e}")
             traceback.print_exc()
 
+    analysis_posts = base_recent_posts if base_recent_posts else []
     comment_texts = []
     comments_by_post_url = {}
     comment_target_posts = sorted(
-        all_recent_posts,
+        analysis_posts,
         key=lambda x: (calculate_comment_count(x), x.get('total_interactions', 0)),
         reverse=True
     )[:LLM_COMMENT_POST_LIMIT]
@@ -705,8 +708,8 @@ def main():
         for p in final_data['allPages']
         if not p.get("fetchMeta", {}).get("isComplete90Days")
     ]
-    final_data['contentAnalysis'] = summarize_content(all_recent_posts, comment_texts)
-    final_data['semanticAnalysis'] = run_llm_semantic_analysis(all_recent_posts, comments_by_post_url)
+    final_data['contentAnalysis'] = summarize_content(analysis_posts, comment_texts)
+    final_data['semanticAnalysis'] = run_llm_semantic_analysis(analysis_posts, comments_by_post_url)
     save_progress(final_data)
 
     print(f"\n✅ 所有程式執行完成，資料已成功儲存至 {OUTPUT_JSON_PATH}")
