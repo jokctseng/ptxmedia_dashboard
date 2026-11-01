@@ -1,11 +1,11 @@
 {
-    "lastUpdated": "2026-10-01 18:38:46",
+    "lastUpdated": "2026-11-01 18:57:41",
     "dataScope": "所有成功抓取粉專最近 90 天活躍貼文",
     "basePage": {
         "name": "林業及自然保育署屏東分署",
-        "followers": 16875,
-        "pageEngagement": 4.37,
-        "postEngagement": 0.4367,
+        "followers": 17003,
+        "pageEngagement": 2.84,
+        "postEngagement": 0.2841,
         "postCount": 10,
         "fetchMeta": {
             "requestedDays": 90,
@@ -16,186 +16,186 @@
             "stoppedReason": "no_next_cursor",
             "sawOlderThanCutoff": false,
             "isComplete90Days": true,
-            "oldestFetchedAt": "2026-09-18T18:20:50+08:00",
-            "newestFetchedAt": "2026-10-01T10:58:34+08:00"
+            "oldestFetchedAt": "2026-10-17T19:22:46+08:00",
+            "newestFetchedAt": "2026-10-29T19:00:29+08:00"
         }
     },
     "contentAnalysis": {
         "avgDailyPosts": 0.11,
-        "bestPostingTime": "週三 16:00",
-        "sentimentPostPositive": 38,
-        "sentimentPostNeutral": 12,
-        "sentimentPostNegative": 50,
+        "bestPostingTime": "週二 08:00",
+        "sentimentPostPositive": 25,
+        "sentimentPostNeutral": 0,
+        "sentimentPostNegative": 75,
         "sentimentPostSampleCount": 8,
-        "commentSentimentPositive": null,
-        "commentSentimentNeutral": null,
-        "commentSentimentNegative": null,
-        "commentSentimentSampleCount": 0,
+        "commentSentimentPositive": 17,
+        "commentSentimentNeutral": 33,
+        "commentSentimentNegative": 50,
+        "commentSentimentSampleCount": 12,
         "sentimentMethod": "SnowNLP 三分法",
         "topHashtags": [
             {
                 "tag": "#守護南方山林海",
+                "count": 7
+            },
+            {
+                "tag": "#安全第一",
                 "count": 3
             },
             {
-                "tag": "#摩斯漢堡",
+                "tag": "#林業及自然保育署屏東分署",
                 "count": 2
             },
             {
-                "tag": "#林業及自然保育署",
+                "tag": "#墾丁國家森林遊樂區",
                 "count": 2
             },
             {
-                "tag": "#國土生態綠網",
+                "tag": "#雙流國家森林遊樂區",
                 "count": 2
             },
             {
-                "tag": "#林的四次方",
+                "tag": "#北大武山",
                 "count": 2
             },
             {
-                "tag": "#尋找飛進摩斯漢堡的草鴞",
-                "count": 1
+                "tag": "#檜谷山屋",
+                "count": 2
             },
             {
-                "tag": "#友善草鴞農產品標章",
-                "count": 1
+                "tag": "#林後四林平地森林園區",
+                "count": 2
             },
             {
-                "tag": "#友善耕作",
-                "count": 1
+                "tag": "#無痕山林",
+                "count": 2
             },
             {
-                "tag": "#責任消費",
-                "count": 1
-            },
-            {
-                "tag": "#綠冠有機鳳梨農場",
+                "tag": "#外來種移除",
                 "count": 1
             }
         ],
         "topKeywords": [
             {
-                "word": "活動",
-                "count": 16
-            },
-            {
-                "word": "草鴞",
-                "count": 8
+                "word": "自然",
+                "count": 23
             },
             {
                 "word": "生態",
-                "count": 8
+                "count": 18
             },
             {
-                "word": "一起",
-                "count": 8
+                "word": "在地",
+                "count": 18
             },
             {
-                "word": "報名",
-                "count": 8
+                "word": "安全",
+                "count": 17
             },
             {
-                "word": "守護",
-                "count": 7
+                "word": "活動",
+                "count": 12
             },
             {
-                "word": "現場",
-                "count": 7
+                "word": "體驗",
+                "count": 12
             },
             {
-                "word": "得獎",
-                "count": 6
+                "word": "社區",
+                "count": 11
             },
             {
-                "word": "植物",
-                "count": 6
+                "word": "森林",
+                "count": 11
             },
             {
-                "word": "香澤蘭",
-                "count": 6
+                "word": "臺灣",
+                "count": 10
+            },
+            {
+                "word": "地方",
+                "count": 10
             }
         ],
         "topPosts": [
             {
                 "page": "林業及自然保育署屏東分署",
-                "date": "2026-09-30",
-                "content": "尋找飛進摩斯漢堡的草鴞】得獎名單揭曉！驚喜加碼啦！ 🦉✨\n\n前陣子請大家幫忙尋找飛進 #摩斯漢堡 的草鴞，沒想到大家的眼...",
-                "interactions": 310,
-                "interactionsText": "310",
-                "er": "1.84%"
+                "date": "2026-10-20",
+                "content": "【直擊射擊特訓現場！守護生態與農作的「安全準星」🎯🦎】\n\n在南臺灣溫暖的陽光下，田邊竄動的「綠色大訪客」—外來入侵種綠鬣...",
+                "interactions": 106,
+                "interactionsText": "106",
+                "er": "0.62%"
             },
             {
                 "page": "林業及自然保育署屏東分署",
-                "date": "2026-09-30",
-                "content": "👉 「半夜不睡覺！這隻動物在練極限攀岩？！🧗‍♂️💥」\n\n原來是「森林鎧甲武士」——穿山甲，正在挑選牠的夢幻良宅啦！🏡✨...",
-                "interactions": 181,
-                "interactionsText": "181",
-                "er": "1.07%"
+                "date": "2026-10-19",
+                "content": "🌿 木育館活動｜認識國產材，手作自然趣 ✨\n\n你知道不同的木材有什麼特色嗎？這次木育館邀請鄧兆鈞老師，帶大家認識國產材，...",
+                "interactions": 103,
+                "interactionsText": "103",
+                "er": "0.61%"
             },
             {
                 "page": "林業及自然保育署屏東分署",
-                "date": "2026-09-23",
-                "content": "🌿 【泰武跨社區齊心護山林！公私協力清除 293 公斤強勢外來入侵植物「香澤蘭」】 🌿\n\n屏東分署潮州工作站今（23）日...",
-                "interactions": 79,
-                "interactionsText": "79",
-                "er": "0.47%"
+                "date": "2026-10-22",
+                "content": "【走進生活原型  看見山海根經濟 🌱｜南臺灣 4 條里山深度體驗遊程全新登場！✨】\n\n當企業永續（ESG）與自然相關財務...",
+                "interactions": 85,
+                "interactionsText": "85",
+                "er": "0.5%"
             },
             {
                 "page": "林業及自然保育署屏東分署",
-                "date": "2026-09-22",
-                "content": "【秋風起、鷹揚季！台灣最南端國小的生態守護記 🦅🌾】\n每年秋天，恆春半島的天空與枝頭總是熱鬧非凡！今天我們和墾丁國小鵝鑾...",
-                "interactions": 58,
-                "interactionsText": "58",
-                "er": "0.34%"
+                "date": "2026-10-21",
+                "content": "🎉 叫了半世紀的「第2908號保安林」，現在擁有屬於自己在地的名字啦！🎉\n\n在澎湖縣白沙鄉後寮村，有一座 9.76 公頃...",
+                "interactions": 67,
+                "interactionsText": "67",
+                "er": "0.39%"
             },
             {
                 "page": "林業及自然保育署屏東分署",
-                "date": "2026-09-27",
-                "content": "【🐟 一尾小魚的遠征！翻開得獎繪本，陪牠逆流游洄家】\n\n大家知道在陽光明媚的恆春半島，「保力溪」孕育了多麼豐富的洄游生命...",
-                "interactions": 28,
-                "interactionsText": "28",
-                "er": "0.17%"
+                "date": "2026-10-17",
+                "content": "🌿【六龜好集市熱鬧登場！邀您共度秋日野森活】🌳\n\n一年一度的「六龜好集市」\n在 #lamis 的悠然地歌聲中，今天在六龜...",
+                "interactions": 53,
+                "interactionsText": "53",
+                "er": "0.31%"
             },
             {
                 "page": "林業及自然保育署屏東分署",
-                "date": "2026-09-22",
-                "content": "木育館｜7月活動回顧 🤖\n炎炎夏日，暑假正式來臨！木育館與大朋友、小朋友一起體驗國產材盆栽機器人 DIY，在手作時光中，...",
-                "interactions": 28,
-                "interactionsText": "28",
-                "er": "0.17%"
+                "date": "2026-10-22",
+                "content": "🌀 強烈颱風薔琵接近！高屏森林育樂場域與自然步道 10/22 13:00 起預警性關閉 🛑\n\n各位熱愛山林與大自然的朋友...",
+                "interactions": 23,
+                "interactionsText": "23",
+                "er": "0.14%"
             },
             {
                 "page": "林業及自然保育署屏東分署",
-                "date": "2026-09-18",
-                "content": "🌿 木育館活動｜蕨對植感 💫\n\n從鹿角蕨的植物特色、上板技巧到日常養護，帶你一步步完成專屬的鹿角蕨植栽，將自然綠意帶進生...",
-                "interactions": 28,
-                "interactionsText": "28",
-                "er": "0.17%"
+                "date": "2026-10-24",
+                "content": "【🌤️ 颱風逐漸遠離！雙流 10/25、墾丁 10/26 接續恢復開園 🌿（高屏自然步道與山屋持續休園）】\n\n大家久等了...",
+                "interactions": 21,
+                "interactionsText": "21",
+                "er": "0.12%"
             },
             {
                 "page": "林業及自然保育署屏東分署",
-                "date": "2026-10-01",
-                "content": "🍂 2026年10月活動｜一起來小棧，走進自然的世界！\n\n10月準備了三場不同主題的活動，從木竹材、兒童版畫，到野望影展...",
-                "interactions": 19,
-                "interactionsText": "19",
-                "er": "0.11%"
+                "date": "2026-10-22",
+                "content": "【防颱警報與漂流木撿拾安全提醒】 ⚠️\n\n強烈颱風「薔琵」持續逼近，中央氣象署已將 高雄及屏東地區 納入陸上颱風警報範圍...",
+                "interactions": 16,
+                "interactionsText": "16",
+                "er": "0.09%"
             },
             {
                 "page": "林業及自然保育署屏東分署",
-                "date": "2026-10-01",
+                "date": "2026-10-22",
                 "content": "無文字內容",
-                "interactions": 3,
-                "interactionsText": "3",
-                "er": "0.02%"
+                "interactions": 7,
+                "interactionsText": "7",
+                "er": "0.04%"
             },
             {
                 "page": "林業及自然保育署屏東分署",
-                "date": "2026-10-01",
+                "date": "2026-10-29",
                 "content": "無文字內容",
-                "interactions": 3,
-                "interactionsText": "3",
-                "er": "0.02%"
+                "interactions": 2,
+                "interactionsText": "2",
+                "er": "0.01%"
             }
         ]
     },
@@ -203,9 +203,9 @@
         {
             "name": "林業及自然保育署屏東分署",
             "type": "基準粉專",
-            "followers": 16875,
-            "pageEngagement": 4.37,
-            "postEngagement": 0.4367,
+            "followers": 17003,
+            "pageEngagement": 2.84,
+            "postEngagement": 0.2841,
             "postCount": 10,
             "fetchMeta": {
                 "requestedDays": 90,
@@ -216,16 +216,16 @@
                 "stoppedReason": "no_next_cursor",
                 "sawOlderThanCutoff": false,
                 "isComplete90Days": true,
-                "oldestFetchedAt": "2026-09-18T18:20:50+08:00",
-                "newestFetchedAt": "2026-10-01T10:58:34+08:00"
+                "oldestFetchedAt": "2026-10-17T19:22:46+08:00",
+                "newestFetchedAt": "2026-10-29T19:00:29+08:00"
             }
         },
         {
             "name": "林業及自然保育署",
             "type": "林保署體系",
-            "followers": 280247,
-            "pageEngagement": 1.6,
-            "postEngagement": 0.1604,
+            "followers": 281709,
+            "pageEngagement": 1.2,
+            "postEngagement": 0.1203,
             "postCount": 10,
             "fetchMeta": {
                 "requestedDays": 90,
@@ -236,14 +236,14 @@
                 "stoppedReason": "no_next_cursor",
                 "sawOlderThanCutoff": false,
                 "isComplete90Days": true,
-                "oldestFetchedAt": "2026-09-25T12:00:24+08:00",
-                "newestFetchedAt": "2026-10-01T17:00:01+08:00"
+                "oldestFetchedAt": "2026-10-27T08:20:00+08:00",
+                "newestFetchedAt": "2026-11-01T12:00:09+08:00"
             }
         },
         {
             "name": "林業及自然保育署臺東分署",
             "type": "林保署體系",
-            "followers": 23610,
+            "followers": 23700,
             "pageEngagement": 0,
             "postEngagement": 0,
             "postCount": 0,
@@ -263,27 +263,27 @@
         {
             "name": "林業及自然保育署臺中分署",
             "type": "林保署體系",
-            "followers": 21771,
-            "pageEngagement": 0,
-            "postEngagement": 0,
-            "postCount": 0,
+            "followers": 21971,
+            "pageEngagement": 4.83,
+            "postEngagement": 0.4829,
+            "postCount": 10,
             "fetchMeta": {
                 "requestedDays": 90,
                 "postsPerRequest": 10,
                 "maxPages": 200,
-                "rawFetchedPosts": 0,
-                "validPosts": 0,
-                "stoppedReason": "no_posts",
+                "rawFetchedPosts": 10,
+                "validPosts": 10,
+                "stoppedReason": "no_next_cursor",
                 "sawOlderThanCutoff": false,
                 "isComplete90Days": true,
-                "oldestFetchedAt": null,
-                "newestFetchedAt": null
+                "oldestFetchedAt": "2026-10-14T20:20:24+08:00",
+                "newestFetchedAt": "2026-11-01T13:13:33+08:00"
             }
         },
         {
             "name": "林業及自然保育署嘉義分署",
             "type": "林保署體系",
-            "followers": 8870,
+            "followers": 9143,
             "pageEngagement": 0,
             "postEngagement": 0,
             "postCount": 0,
@@ -303,9 +303,9 @@
         {
             "name": "林業及自然保育署花蓮分署",
             "type": "林保署體系",
-            "followers": 25146,
-            "pageEngagement": 7.28,
-            "postEngagement": 0.7281,
+            "followers": 25209,
+            "pageEngagement": 2.88,
+            "postEngagement": 0.288,
             "postCount": 10,
             "fetchMeta": {
                 "requestedDays": 90,
@@ -316,16 +316,16 @@
                 "stoppedReason": "no_next_cursor",
                 "sawOlderThanCutoff": false,
                 "isComplete90Days": true,
-                "oldestFetchedAt": "2026-09-03T15:58:42+08:00",
-                "newestFetchedAt": "2026-10-01T09:19:53+08:00"
+                "oldestFetchedAt": "2026-10-08T11:12:32+08:00",
+                "newestFetchedAt": "2026-10-30T14:20:55+08:00"
             }
         },
         {
             "name": "林業保育署宜蘭分署",
             "type": "林保署體系",
-            "followers": 2121,
-            "pageEngagement": 25.37,
-            "postEngagement": 2.5365,
+            "followers": 2252,
+            "pageEngagement": 19.85,
+            "postEngagement": 1.9849,
             "postCount": 10,
             "fetchMeta": {
                 "requestedDays": 90,
@@ -336,56 +336,76 @@
                 "stoppedReason": "no_next_cursor",
                 "sawOlderThanCutoff": false,
                 "isComplete90Days": true,
-                "oldestFetchedAt": "2026-09-17T13:48:19+08:00",
-                "newestFetchedAt": "2026-10-01T08:04:12+08:00"
+                "oldestFetchedAt": "2026-10-21T21:31:58+08:00",
+                "newestFetchedAt": "2026-11-01T12:00:09+08:00"
+            }
+        },
+        {
+            "name": "阿里山林業鐵路及文化資產管理處Alishan Forest Railway and Cultural Heritage Office",
+            "type": "林保署體系",
+            "followers": 60111,
+            "pageEngagement": 4.49,
+            "postEngagement": 0.4492,
+            "postCount": 10,
+            "fetchMeta": {
+                "requestedDays": 90,
+                "postsPerRequest": 10,
+                "maxPages": 200,
+                "rawFetchedPosts": 10,
+                "validPosts": 10,
+                "stoppedReason": "no_next_cursor",
+                "sawOlderThanCutoff": false,
+                "isComplete90Days": true,
+                "oldestFetchedAt": "2026-09-30T10:00:03+08:00",
+                "newestFetchedAt": "2026-10-27T12:00:10+08:00"
             }
         },
         {
             "name": "林業保育署航測及遙測分署-360 Face",
             "type": "林保署體系",
-            "followers": 15099,
-            "pageEngagement": 0.98,
-            "postEngagement": 0.4901,
-            "postCount": 2,
+            "followers": 15061,
+            "pageEngagement": 1.35,
+            "postEngagement": 0.337,
+            "postCount": 4,
             "fetchMeta": {
                 "requestedDays": 90,
                 "postsPerRequest": 10,
                 "maxPages": 200,
                 "rawFetchedPosts": 10,
-                "validPosts": 2,
+                "validPosts": 4,
                 "stoppedReason": "no_next_cursor",
                 "sawOlderThanCutoff": true,
                 "isComplete90Days": true,
-                "oldestFetchedAt": "2026-05-05T12:00:02+08:00",
-                "newestFetchedAt": "2026-09-25T10:00:51+08:00"
+                "oldestFetchedAt": "2026-05-20T08:58:46+08:00",
+                "newestFetchedAt": "2026-10-12T12:05:00+08:00"
             }
         },
         {
             "name": "林後四林平地森林園區",
             "type": "屏東分署下轄",
-            "followers": 25639,
-            "pageEngagement": 0,
-            "postEngagement": 0,
-            "postCount": 0,
+            "followers": 25725,
+            "pageEngagement": 1.67,
+            "postEngagement": 0.1668,
+            "postCount": 10,
             "fetchMeta": {
                 "requestedDays": 90,
                 "postsPerRequest": 10,
                 "maxPages": 200,
-                "rawFetchedPosts": 0,
-                "validPosts": 0,
-                "stoppedReason": "no_posts",
+                "rawFetchedPosts": 10,
+                "validPosts": 10,
+                "stoppedReason": "no_next_cursor",
                 "sawOlderThanCutoff": false,
                 "isComplete90Days": true,
-                "oldestFetchedAt": null,
-                "newestFetchedAt": null
+                "oldestFetchedAt": "2026-09-17T10:55:04+08:00",
+                "newestFetchedAt": "2026-10-24T17:00:49+08:00"
             }
         },
         {
             "name": "雙流國家森林遊樂區",
             "type": "屏東分署下轄",
-            "followers": 21570,
-            "pageEngagement": 2.68,
-            "postEngagement": 0.2684,
+            "followers": 21606,
+            "pageEngagement": 2.8,
+            "postEngagement": 0.28,
             "postCount": 10,
             "fetchMeta": {
                 "requestedDays": 90,
@@ -396,16 +416,16 @@
                 "stoppedReason": "no_next_cursor",
                 "sawOlderThanCutoff": false,
                 "isComplete90Days": true,
-                "oldestFetchedAt": "2026-08-22T17:33:07+08:00",
-                "newestFetchedAt": "2026-09-18T17:00:20+08:00"
+                "oldestFetchedAt": "2026-08-23T16:10:50+08:00",
+                "newestFetchedAt": "2026-10-24T21:22:49+08:00"
             }
         },
         {
             "name": "墾丁國家森林遊樂區",
             "type": "屏東分署下轄",
-            "followers": 14882,
-            "pageEngagement": 1.29,
-            "postEngagement": 0.129,
+            "followers": 14924,
+            "pageEngagement": 1.73,
+            "postEngagement": 0.1729,
             "postCount": 10,
             "fetchMeta": {
                 "requestedDays": 90,
@@ -416,36 +436,36 @@
                 "stoppedReason": "no_next_cursor",
                 "sawOlderThanCutoff": false,
                 "isComplete90Days": true,
-                "oldestFetchedAt": "2026-09-01T16:59:58+08:00",
-                "newestFetchedAt": "2026-09-30T19:19:19+08:00"
+                "oldestFetchedAt": "2026-09-18T15:38:17+08:00",
+                "newestFetchedAt": "2026-10-29T12:00:11+08:00"
             }
         },
         {
             "name": "雙流自然教育中心",
             "type": "屏東分署下轄",
-            "followers": 15852,
-            "pageEngagement": 0,
-            "postEngagement": 0,
-            "postCount": 0,
+            "followers": 15870,
+            "pageEngagement": 2.58,
+            "postEngagement": 0.2583,
+            "postCount": 10,
             "fetchMeta": {
                 "requestedDays": 90,
                 "postsPerRequest": 10,
                 "maxPages": 200,
-                "rawFetchedPosts": 0,
-                "validPosts": 0,
-                "stoppedReason": "no_posts",
+                "rawFetchedPosts": 10,
+                "validPosts": 10,
+                "stoppedReason": "no_next_cursor",
                 "sawOlderThanCutoff": false,
                 "isComplete90Days": true,
-                "oldestFetchedAt": null,
-                "newestFetchedAt": null
+                "oldestFetchedAt": "2026-09-18T22:01:43+08:00",
+                "newestFetchedAt": "2026-10-29T20:30:03+08:00"
             }
         },
         {
             "name": "i屏東～愛屏東",
             "type": "屏東縣旅遊",
-            "followers": 241560,
+            "followers": 242013,
             "pageEngagement": 0.38,
-            "postEngagement": 0.0375,
+            "postEngagement": 0.0381,
             "postCount": 10,
             "fetchMeta": {
                 "requestedDays": 90,
@@ -456,49 +476,57 @@
                 "stoppedReason": "no_next_cursor",
                 "sawOlderThanCutoff": false,
                 "isComplete90Days": true,
-                "oldestFetchedAt": "2026-09-29T19:00:01+08:00",
-                "newestFetchedAt": "2026-10-01T12:00:23+08:00"
+                "oldestFetchedAt": "2026-10-21T17:00:49+08:00",
+                "newestFetchedAt": "2026-11-01T18:57:37+08:00"
+            }
+        },
+        {
+            "name": "屏東go好玩-屏東縣政府交通旅遊處",
+            "type": "屏東縣旅遊",
+            "followers": 109838,
+            "pageEngagement": 1.15,
+            "postEngagement": 0.115,
+            "postCount": 10,
+            "fetchMeta": {
+                "requestedDays": 90,
+                "postsPerRequest": 10,
+                "maxPages": 200,
+                "rawFetchedPosts": 10,
+                "validPosts": 10,
+                "stoppedReason": "no_next_cursor",
+                "sawOlderThanCutoff": false,
+                "isComplete90Days": true,
+                "oldestFetchedAt": "2026-10-29T20:00:09+08:00",
+                "newestFetchedAt": "2026-11-01T14:00:08+08:00"
             }
         },
         {
             "name": "大鵬灣國家風景區管理處 Dapeng Bay NSA",
             "type": "屏東縣旅遊",
-            "followers": 86593,
-            "pageEngagement": 3.83,
-            "postEngagement": 0.3832,
-            "postCount": 10,
+            "followers": 87449,
+            "pageEngagement": 0.65,
+            "postEngagement": 0.0726,
+            "postCount": 9,
             "fetchMeta": {
                 "requestedDays": 90,
                 "postsPerRequest": 10,
                 "maxPages": 200,
                 "rawFetchedPosts": 10,
-                "validPosts": 10,
+                "validPosts": 9,
                 "stoppedReason": "no_next_cursor",
-                "sawOlderThanCutoff": false,
+                "sawOlderThanCutoff": true,
                 "isComplete90Days": true,
-                "oldestFetchedAt": "2026-09-20T11:53:49+08:00",
-                "newestFetchedAt": "2026-10-01T13:41:04+08:00"
+                "oldestFetchedAt": "2026-07-10T09:30:41+08:00",
+                "newestFetchedAt": "2026-10-31T11:07:30+08:00"
             }
         }
     ],
     "incompletePages": [],
     "skippedPages": [
         {
-            "name": "阿里山林業鐵路及文化資產管理處Alishan Forest Railway and Cultural Heritage Office",
-            "type": "林保署體系",
-            "url": "https://www.facebook.com/AlishanForestRailway.Taiwan",
-            "reason": "profile_data unavailable"
-        },
-        {
             "name": "藤枝國家森林遊樂區",
             "type": "屏東分署下轄",
             "url": "https://www.facebook.com/Tengjhih2021",
-            "reason": "profile_data unavailable"
-        },
-        {
-            "name": "屏東go好玩-屏東縣政府交通旅遊處",
-            "type": "屏東縣旅遊",
-            "url": "https://www.facebook.com/PINGTUNGTRIP",
             "reason": "profile_data unavailable"
         }
     ],
